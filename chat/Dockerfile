@@ -14,4 +14,4 @@ RUN mvn clean install
 EXPOSE 8080
 
 # start the application
-CMD ["java", "-jar", "target/your-application.jar"]
+CMD ["java", "-jar", "target/chat.jar"]
