@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 public class ChatApplication {
 
-	 @GetMapping
-    public String welcome() {
-        return "Welcome to Google !!";
+  @GetMapping
+  public String welcome() {
+       return "Welcome to Google !!";
     }
-
+  
     @GetMapping("/user")
     public Principal user(Principal principal) {
         System.out.println("username : " + principal.getName());
@@ -24,3 +24,4 @@ public class ChatApplication {
 	}
  
 }
+
