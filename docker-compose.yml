@@ -1,48 +1,37 @@
-version: '3'
+version: '3' 
 
 services:
+
+  mysqldb:
+    image: mysql-image
+    build: ./chat/mongodb
+    volumes:
+      - ./chat/mongodb/conf:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: mydatabase
+      MYSQL_ROOT_PASSWORD: abc
+      MYSQL_USER: abc
+      MYSQL_PASSWORD: abc
+    networks:
+      - CHATNET
+
   chat:
     image: chat-image
     build: ./chat
     ports:
-      - "8080:8080"
-    environment:
-      DATABASE_HOST: chat_db
-      DATABASE_USER: root
-      DATABASE_PASSWORD: cnse
-      DATABASE_NAME: chat_db
+      - "8080:8080"   
     depends_on:
-      - chat_db
-    networks:
-      - CHATNET
-
-  adminer:
-    image: adminer
-    restart: always
-    ports: 
-      - "8082:8080"
-    networks:
-      - CHATNET
-
-  chat_db:
-    image: chat_db-image
-    build: ./chat_db
+      - mysqldb
     environment:
-      MYSQL_ROOT_PASSWORD: cnse
-      MYSQL_DATABASE: chat_db
-    ports:
-      - "3308:3306"
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mydatabase
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_USERNAME: abc
+      SPRING_DATASOURCE_PASSWORD: abc
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     networks:
-      - CHATNET
-
-  user_db:
-    image: user_db-image
-    build: ./user_db
-    environment:
-      MYSQL_ROOT_PASSWORD: cnse
-      MYSQL_DATABASE: user_db
-    networks:
-      - CHATNET      
+      - CHATNET 
 
 networks:
   CHATNET:

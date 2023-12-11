@@ -2,11 +2,10 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
@@ -17,6 +16,7 @@ public class Chat {
     private Long id;
     private String name;
     private String password;
+    private Long userId;
 
     @OneToMany(mappedBy = "chat")
     private List<Message> messages;
@@ -67,6 +67,14 @@ public class Chat {
 
     public void setMessages(List<Message> message) {
         this.messages = message;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     /*public void setUserIds(List<User> users) {

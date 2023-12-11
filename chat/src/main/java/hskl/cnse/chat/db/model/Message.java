@@ -2,28 +2,33 @@ package hskl.cnse.chat.db.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(insertable=false, updatable=false)
     private Long id;
 
     private String content;
-    private String sender;
-    private String receiver;
+    private Long userId;
+
+    @CreationTimestamp
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "chat_id")
+    @JoinColumn(name = "id")
     private Chat chat;
 
     /*@ManyToOne
@@ -33,18 +38,16 @@ public class Message {
     public Message() {
     }
 
-    public Message(String content, String sender, String receiver, LocalDateTime timestamp) {
+    public Message(String content, Long sender, LocalDateTime timestamp) {
         this.content = content;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.userId = sender;
         this.timestamp = timestamp;
     }
 
-    public Message(Long id, String content, String sender, String receiver, LocalDateTime timestamp) {
+    public Message(Long id, String content, Long sender, LocalDateTime timestamp) {
         this.id = id;
         this.content = content;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.userId = sender;
         this.timestamp = timestamp;
     }
 
@@ -64,20 +67,12 @@ public class Message {
         this.content = content;
     }
 
-    public String getSender() {
-        return sender;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setUserId(Long sender) {
+        this.userId = sender;
     }
 
     public LocalDateTime getTimestamp() {

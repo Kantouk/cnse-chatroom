@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>hskl.cnse</groupId>
 	<artifactId>chat</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>-latest</version>
 	<name>chat</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -20,10 +20,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version> <!-- Use the latest version available -->
 		</dependency>
 		<dependency>
 			<groupId>javax.persistence</groupId>

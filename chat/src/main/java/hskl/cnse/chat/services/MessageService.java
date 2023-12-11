@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hskl.cnse.chat.db.repositories.MessageRepository;
 import hskl.cnse.chat.db.model.Message;
+import hskl.cnse.chat.db.repositories.MessageRepository;
 
 @Service
 public class MessageService {
