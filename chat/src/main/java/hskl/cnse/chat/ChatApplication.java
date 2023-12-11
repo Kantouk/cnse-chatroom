@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 public class ChatApplication {
 
-  @GetMapping
+  @GetMapping("/index")
   public String welcome() {
-       return "Welcome to Google !!";
+       return "index";
     }
   
     @GetMapping("/user")
