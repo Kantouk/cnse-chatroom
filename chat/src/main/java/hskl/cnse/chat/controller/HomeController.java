@@ -1,9 +1,10 @@
 package hskl.cnse.chat.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HomeController {
 
     //@GetMapping("/")
@@ -13,6 +14,6 @@ public class HomeController {
 
     @GetMapping("/secured")
     public String secured() {
-        return "Hello, Secured!";
+        return "chat";
     }
 }
