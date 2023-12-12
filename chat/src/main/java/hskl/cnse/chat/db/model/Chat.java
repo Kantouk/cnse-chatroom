@@ -2,6 +2,7 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @Nullable
     private String password;
     private Long userId;
 
@@ -77,7 +79,7 @@ public class Chat {
         return userId;
     }
 
-    /*public void setUserIds(List<User> users) {
+    /*public void setParticipants(List<User> users) {
         this.participants = users;
     }
 

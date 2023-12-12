@@ -4,9 +4,9 @@ services:
 
   mysqldb:
     image: mysql-image
-    build: ./chat/mongodb
+    build: ./chat/mysql
     volumes:
-      - ./chat/mongodb/conf:/etc/mysql/conf.d
+      - ./chat/mysql/conf:/etc/mysql/conf.d
     ports:
       - "3306:3306"
     environment:
