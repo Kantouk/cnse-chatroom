@@ -1,4 +1,4 @@
-package hskl.cnse.chat.services;
+package hskl.cnse.chat.controller;
 
 import java.util.Collection;
 
@@ -25,8 +25,8 @@ class AuthUser implements UserDetails {
         return AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", getRoles()));
     }
 
-    private CharSequence getRoles() {
-        return null;
+    CharSequence getRoles() {
+        return this.roles;
     }
 
     @Override
