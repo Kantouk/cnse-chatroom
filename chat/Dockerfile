@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM maven:3.8-openjdk-17
 
 # set the working directory to /app (this will also create the /app directory)
 WORKDIR /app
@@ -8,10 +8,12 @@ COPY pom.xml .
 COPY src ./src
 
 # build the application with maven
-RUN mvn clean install
+RUN mvn clean install -DskipTests
 
 # expose the standard spring port
 EXPOSE 8080
 
+WORKDIR /app/target
+
 # start the application
-CMD ["java", "-jar", "target/chat.jar"]
+CMD ["java", "-jar", "chat--latest.jar"]
