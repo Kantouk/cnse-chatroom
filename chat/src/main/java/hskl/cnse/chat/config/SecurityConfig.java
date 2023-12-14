@@ -35,7 +35,7 @@ public class SecurityConfig  {
                                 })
                                 .oauth2Login(oauth2 -> oauth2
                                                 .defaultSuccessUrl("/index.html", true))
-                                .formLogin(withDefaults())
+                                .formLogin(withDefaults()) /*TODO: Joshua Login Page anfertigen */
                                 .logout(logout -> logout
                                                 .logoutSuccessUrl("/index.html")
                                                 .addLogoutHandler((request, response, auth) -> {

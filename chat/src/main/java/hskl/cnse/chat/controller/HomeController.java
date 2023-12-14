@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import hskl.cnse.chat.bean.AuthUser;
+
 @Controller
 public class HomeController {
 
@@ -20,7 +22,7 @@ public class HomeController {
         return "chat";
     }
 
-    @GetMapping("/handleGet")
+    @GetMapping("/authenticated")
     public String handleGet(@AuthenticationPrincipal(expression = "authUser") AuthUser authUser, Model model) {
         if (authUser.getRoles().contains("ADMIN")) {
             // Logic for handling the request for ADMIN

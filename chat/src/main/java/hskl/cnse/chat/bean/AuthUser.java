@@ -1,4 +1,4 @@
-package hskl.cnse.chat.controller;
+package hskl.cnse.chat.bean;
 
 import java.util.ArrayList;
 import java.util.Collection;
