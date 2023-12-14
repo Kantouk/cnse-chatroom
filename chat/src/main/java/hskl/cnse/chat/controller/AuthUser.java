@@ -1,16 +1,16 @@
 package hskl.cnse.chat.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-class AuthUser implements UserDetails {
+public class AuthUser implements UserDetails {
 
-    private String email;
-    private String password;
-    private Collection<? extends GrantedAuthority> roles;
+    private final String email;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> roles;
 
     public AuthUser(String email, String password, Collection<? extends GrantedAuthority> roles) {
         this.email = email;
@@ -18,14 +18,12 @@ class AuthUser implements UserDetails {
         this.roles = roles;
     }
 
-    // Getters for email, password, and roles
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", getRoles()));
+        return new ArrayList<>(getRoles());
     }
 
-    CharSequence getRoles() {
+    public Collection<? extends GrantedAuthority> getRoles() {
         return this.roles;
     }
 
@@ -39,13 +37,9 @@ class AuthUser implements UserDetails {
         return this.email;
     }
 
-    // Implement other methods like isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled
-    // These methods return boolean values indicating whether the user account is valid.
-
-    // Example:
     @Override
     public boolean isAccountNonExpired() {
-        return true; // You may implement the logic based on your requirements.
+        return true; // Implementiere die Logik basierend auf deinen Anforderungen.
     }
 
     @Override
@@ -61,9 +55,5 @@ class AuthUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setUserPassword(String newPassword) {
-        this.password = newPassword;
     }
 }

@@ -33,9 +33,9 @@ public class ChatErrorController implements ErrorController {
         return "error";
     }
 
+    /* TODO: Implement this method
     @Override
     public String getErrorPath() {
-        return "/error";
-    }
+    } */
 }
 

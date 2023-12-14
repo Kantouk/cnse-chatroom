@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AppUserDetailsService implements UserDetailsService, UserDetailsPasswordService {
+
     @Override
     public UserDetails updatePassword(UserDetails user, String newPassword) {
-        // set password for specified user in db
+        //TODO: update password in db
+        throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // return specified user from db
+        // TODO: return specified user from db
+        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
     }
+
 }

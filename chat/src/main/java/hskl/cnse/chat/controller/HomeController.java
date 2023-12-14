@@ -1,6 +1,6 @@
 package hskl.cnse.chat.controller;
 
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,27 +15,25 @@ public class HomeController {
     }
 
     @GetMapping("/secured")
-    public String secured(@AuthenticationPrincipal AuthUser authUser, Model model) {
-        if (authUser.getRoles().contains("ADMIN")) {
-            // Logic for handling secured page for ADMIN
-            return "adminPage";
-        } else {
-            // Logic for handling secured page for other users
-            model.addAttribute("user", authUser);
-            return "userPage";
-        }
+    public String secured(@AuthenticationPrincipal(expression = "authUser") AuthUser authUser, Model model) {
+        handleSecuredRequest(authUser, model);
+        return "chat";
     }
 
     @GetMapping("/handleGet")
-    public String handleGet(@AuthenticationPrincipal AuthUser authUser, Model model) {
+    public String handleGet(@AuthenticationPrincipal(expression = "authUser") AuthUser authUser, Model model) {
         if (authUser.getRoles().contains("ADMIN")) {
             // Logic for handling the request for ADMIN
-            return "adminResponse";
+            return "chat";
         } else {
             // Logic for handling the request for other users
-            model.addAttribute("user", authUser);
-            return "userResponse";
+            handleSecuredRequest(authUser, model);
+            return "chat";
         }
     }
-}
 
+    private void handleSecuredRequest(AuthUser authUser, Model model) {
+        // Common logic for handling secured requests
+        model.addAttribute("user", authUser);
+    }
+}

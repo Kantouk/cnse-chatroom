@@ -29,8 +29,8 @@ public class SecurityConfig  {
                                         auth.requestMatchers("/").permitAll();
                                         auth.requestMatchers("/favicon.ico").permitAll();
                                         auth.requestMatchers("/swagger-ui/**").permitAll(); 
-                                        auth.requestMatchers("/actuator/**").hasRole("ADMIN");
-                                        auth.requestMatchers("/secured/**").hasRole("USER");
+                                        auth.requestMatchers("/").hasRole("ADMIN");
+                                        auth.requestMatchers("/").hasRole("USER");
                                         auth.anyRequest().authenticated();
                                 })
                                 .oauth2Login(oauth2 -> oauth2
