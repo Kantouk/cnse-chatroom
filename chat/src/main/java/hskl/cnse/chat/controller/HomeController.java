@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import hskl.cnse.chat.bean.AuthUser;
+import hskl.cnse.chat.db.model.User;
 
 @Controller
 public class HomeController {
@@ -17,13 +17,13 @@ public class HomeController {
     }
 
     @GetMapping("/secured")
-    public String secured(@AuthenticationPrincipal(expression = "authUser") AuthUser authUser, Model model) {
+    public String secured(@AuthenticationPrincipal(expression = "authUser") User authUser, Model model) {
         handleSecuredRequest(authUser, model);
         return "chat";
     }
 
     @GetMapping("/authenticated")
-    public String handleGet(@AuthenticationPrincipal(expression = "authUser") AuthUser authUser, Model model) {
+    public String handleGet(@AuthenticationPrincipal(expression = "authUser") User authUser, Model model) {
         if (authUser.getRoles().contains("ADMIN")) {
             // Logic for handling the request for ADMIN
             return "chat";
@@ -34,7 +34,7 @@ public class HomeController {
         }
     }
 
-    private void handleSecuredRequest(AuthUser authUser, Model model) {
+    private void handleSecuredRequest(User authUser, Model model) {
         // Common logic for handling secured requests
         model.addAttribute("user", authUser);
     }

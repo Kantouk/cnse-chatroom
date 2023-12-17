@@ -23,8 +23,8 @@ public class Chat {
     @OneToMany(mappedBy = "chat")
     private List<Message> messages;
 
-    /*@ManyToMany
-    private List<User> participants;*/
+    @ManyToMany
+    private List<User> participants;
 
     public Chat() {
     }
@@ -79,7 +79,7 @@ public class Chat {
         return userId;
     }
 
-    /*public void setParticipants(List<User> users) {
+    public void setParticipants(List<User> users) {
         this.participants = users;
     }
 
@@ -97,6 +97,6 @@ public class Chat {
 
     public boolean hasUser(User user) {
         return this.participants.contains(user);
-    }*/
+    }
 
 }

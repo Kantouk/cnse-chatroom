@@ -70,8 +70,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>hskl.cnse.chat.ChatApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	
 
 </project>
