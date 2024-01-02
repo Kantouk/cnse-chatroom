@@ -18,7 +18,6 @@ public class Chat {
     private String name;
     @Nullable
     private String password;
-    private Long userId;
 
     @OneToMany(mappedBy = "chat")
     private List<Message> messages;
@@ -69,14 +68,6 @@ public class Chat {
 
     public void setMessages(List<Message> message) {
         this.messages = message;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getUserId() {
-        return userId;
     }
 
     public void setParticipants(List<User> users) {

@@ -15,7 +15,7 @@ public class ChatService {
 
     public List<Chat> getChatsByUserId(Long userId) {
         // Chats eines Nutzers abfragen
-        return chatRepository.findByUserId(userId);
+        return chatRepository.findByUser_Id(userId);
     }
 
     public Chat createChat(Chat chat) {

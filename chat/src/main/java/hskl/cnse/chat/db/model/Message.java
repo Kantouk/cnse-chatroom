@@ -20,14 +20,13 @@ public class Message {
     private Long id;
 
     private String content;
-    private Long userId;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "chat_id")
     private Chat chat;
 
     @ManyToOne
@@ -37,16 +36,16 @@ public class Message {
     public Message() {
     }
 
-    public Message(String content, Long sender, LocalDateTime timestamp) {
+    public Message(String content, User sender, LocalDateTime timestamp) {
         this.content = content;
-        this.userId = sender;
+        this.user = sender;
         this.timestamp = timestamp;
     }
 
-    public Message(Long id, String content, Long sender, LocalDateTime timestamp) {
+    public Message(Long id, String content, User sender, LocalDateTime timestamp) {
         this.id = id;
         this.content = content;
-        this.userId = sender;
+        this.user = sender;
         this.timestamp = timestamp;
     }
 
@@ -66,12 +65,12 @@ public class Message {
         this.content = content;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUserId() {
+        return user;
     }
 
-    public void setUserId(Long sender) {
-        this.userId = sender;
+    public void setUserId(User sender) {
+        this.user = sender;
     }
 
     public LocalDateTime getTimestamp() {
