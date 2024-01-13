@@ -1,6 +1,9 @@
 package hskl.cnse.chat.db.model;
 
+
 import java.util.Collection;
+import java.util.List; // Import für java.util.List hinzufügen
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,10 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
-import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -31,6 +33,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -45,10 +48,6 @@ public class User {
     @OneToMany(mappedBy = "participants")
     private Collection<Chat> chats;
 
-    public User() {
-
-    }
-
     public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
         super();
         this.firstName = firstName;
@@ -56,6 +55,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
+    }
+
+    public User() {
+        
     }
 
     public Long getId() {
@@ -98,12 +101,20 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public List<String> getRoles() {
+        return roles.stream() // Stream aus Rollen erstellen
+                .map(Role::getName)  // Rolle in String umwandeln
+                .collect(Collectors.toList()); // Liste der Rollen zurückgeben
     }
-
+    
+    
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+    
+    
+
+    
+    
 
 }

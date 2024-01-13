@@ -13,8 +13,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import jakarta.servlet.http.Cookie;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,8 +25,8 @@ public class SecurityConfig {
                                         auth.requestMatchers("/register").permitAll();
                                         auth.requestMatchers("/favicon.ico").permitAll();
                                         auth.requestMatchers("/swagger-ui/**").permitAll();
-                                        auth.requestMatchers("/").hasRole("ADMIN");
-                                        auth.requestMatchers("/").hasRole("USER");
+                                        auth.requestMatchers("/actuator/**").hasRole("ADMIN");
+                                        auth.requestMatchers("/secured/**").hasRole("USER");
                                         auth.anyRequest().authenticated();
                                 })
                                 .oauth2Login(oauth2 -> oauth2
@@ -36,14 +34,11 @@ public class SecurityConfig {
                                 .formLogin(withDefaults()) /* TODO: Joshua Login Page anfertigen */
                                 .logout(logout -> logout
                                                 .logoutSuccessUrl("/index.html")
-                                                .addLogoutHandler((request, response, auth) -> {
-                                                        Cookie cookie = new Cookie("JSESSIONID", null);
-                                                        cookie.setPath("/");
-                                                        cookie.setMaxAge(0);
-                                                        response.addCookie(cookie);
-                                                }))
+                                                )
                                 .build();
         }
+
+       
 
 
         @Bean

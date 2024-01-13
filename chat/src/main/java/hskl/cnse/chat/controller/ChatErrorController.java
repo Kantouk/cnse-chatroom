@@ -21,7 +21,6 @@ public class ChatErrorController implements ErrorController {
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
 
-            
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error-404"; // Custom 404 page
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
@@ -33,9 +32,11 @@ public class ChatErrorController implements ErrorController {
         return "error";
     }
 
-    /* TODO: Implement this method
-    @Override
-    public String getErrorPath() {
-    } */
+    /*
+     * TODO: Implement this method
+     * 
+     * @Override
+     * public String getErrorPath() {
+     * }
+     */
 }
-

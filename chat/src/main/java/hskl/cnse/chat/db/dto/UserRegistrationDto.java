@@ -1,4 +1,4 @@
-package hskl.cnse.chat.web.dto;
+package hskl.cnse.chat.db.dto;
 
 public class UserRegistrationDto {
 	private String firstName;

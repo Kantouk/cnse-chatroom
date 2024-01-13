@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(insertable=false, updatable=false)
+    @Column(insertable = false, updatable = false)
     private Long id;
 
     private String content;

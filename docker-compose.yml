@@ -21,7 +21,7 @@ services:
     image: chat-image
     build: ./chat
     ports:
-      - "8080:8080"   
+      - "8081:8081"   
     depends_on:
       - mysqldb
     environment:
@@ -37,7 +37,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8081:8081
+      - "8080:8080"
     depends_on:
       - mysqldb
     networks:
