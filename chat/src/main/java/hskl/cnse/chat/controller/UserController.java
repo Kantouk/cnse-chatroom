@@ -52,6 +52,8 @@ public class UserController {
 
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
+        user.setFirstName(userRegistrationDto.getFirstName());
+        user.setLastName(userRegistrationDto.getLastName());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
 
         // Setze die Standardrolle für den Benutzer (z.B., "USER")
@@ -62,12 +64,16 @@ public class UserController {
 
         // Logge Informationen über die Registrierung
         logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
         logger.info("Benutzer " + user.getEmail() + " wurde erfolgreich registriert");
         logger.info("Benutzer " + user.getEmail() + " hat folgende Rollen: " + user.getRoles());
         logger.info("Benutzer " + user.getEmail() + " hat folgendes Passwort: " + user.getPassword());
         logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
 
-        // Weiterleitung zur Login-Seite oder einer Bestätigungsseite
-        return "redirect:/login";
+        // Weiterleitung zur Chat-Seite oder einer Bestätigungsseite
+        return "redirect:/index";
     }
 }
