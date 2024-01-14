@@ -93,6 +93,6 @@ public class UserController {
         logger.info("*********************************************************************************");
 
         // Weiterleitung zur Chat-Seite oder einer Bestätigungsseite
-        return "chat";
+        return "index";
     }
 }

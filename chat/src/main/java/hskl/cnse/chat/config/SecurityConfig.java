@@ -27,13 +27,16 @@ public class SecurityConfig {
                                         auth.requestMatchers("/swagger-ui/**").permitAll();
                                         auth.requestMatchers("/actuator/**").hasRole("ADMIN");
                                         auth.requestMatchers("/secured/**").hasRole("USER");
+                                        auth.requestMatchers("/index.html").hasRole("USER");
+                                        auth.requestMatchers("/script.js").permitAll();
+                                        auth.requestMatchers("/styles.js").permitAll();
                                         auth.anyRequest().authenticated();
                                 })
                                 .oauth2Login(oauth2 -> oauth2
                                                 .defaultSuccessUrl("/index.html", true))
                                 .formLogin(withDefaults()) /* TODO: Joshua Login Page anfertigen */
                                 .logout(logout -> logout
-                                                .logoutSuccessUrl("/index.html")
+                                                .logoutSuccessUrl("/login.html")
                                                 )
                                 .build();
         }
