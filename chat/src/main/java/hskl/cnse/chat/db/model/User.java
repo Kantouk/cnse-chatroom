@@ -124,6 +124,12 @@ public class User {
     public void setChats(Collection<Chat> chats) {
         this.chats = chats;
     }
-    
 
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + ", password=" + password + ", roles=" + roles + ", messages=" + messages + ", chats=" + chats + "]";
+    }
+
+    
 }

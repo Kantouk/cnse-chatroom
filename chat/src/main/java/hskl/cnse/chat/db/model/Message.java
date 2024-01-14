@@ -65,14 +65,6 @@ public class Message {
         this.content = content;
     }
 
-    public User getUserId() {
-        return user;
-    }
-
-    public void setUserId(User sender) {
-        this.user = sender;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
@@ -88,5 +80,15 @@ public class Message {
     public void setChat(Chat chat) {
         this.chat = chat;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    
 
 }
