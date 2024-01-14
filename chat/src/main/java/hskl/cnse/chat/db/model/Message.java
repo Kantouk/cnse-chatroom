@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
@@ -17,37 +16,36 @@ import jakarta.persistence.ManyToOne;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(insertable=false, updatable=false)
+    @Column(insertable = false, updatable = false)
     private Long id;
 
     private String content;
-    private Long userId;
 
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;*/
+    private User user;
 
     public Message() {
     }
 
-    public Message(String content, Long sender, LocalDateTime timestamp) {
+    public Message(String content, User sender, LocalDateTime timestamp) {
         this.content = content;
-        this.userId = sender;
+        this.user = sender;
         this.timestamp = timestamp;
     }
 
-    public Message(Long id, String content, Long sender, LocalDateTime timestamp) {
+    public Message(Long id, String content, User sender, LocalDateTime timestamp) {
         this.id = id;
         this.content = content;
-        this.userId = sender;
+        this.user = sender;
         this.timestamp = timestamp;
     }
 
@@ -67,12 +65,12 @@ public class Message {
         this.content = content;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUserId() {
+        return user;
     }
 
-    public void setUserId(Long sender) {
-        this.userId = sender;
+    public void setUserId(User sender) {
+        this.user = sender;
     }
 
     public LocalDateTime getTimestamp() {

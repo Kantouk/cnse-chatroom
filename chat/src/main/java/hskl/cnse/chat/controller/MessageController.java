@@ -20,9 +20,9 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/chat/{chatId}")
-    public ResponseEntity<List<Message>> getMessagesByChat(@PathVariable Long chatId) {
-        List<Message> messages = messageService.getMessagesByChatId(chatId);
+    @GetMapping("/chat/{chat_id}")
+    public ResponseEntity<List<Message>> getMessagesByChat(@PathVariable Long chat_id) {
+        List<Message> messages = messageService.getMessagesByChatId(chat_id);
         return ResponseEntity.ok(messages);
     }
 
@@ -38,23 +38,16 @@ public class MessageController {
         return ResponseEntity.ok(editedMessage);
     }
 
-    @PostMapping("/delete/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable Long messageId) {
-        messageService.deleteMessage(messageId);
+    @PostMapping("/delete/{message_id}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long message_id) {
+        messageService.deleteMessage(message_id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/deleteChatHistoryForUser/{chatId}")
-    public ResponseEntity<Void> deleteChatHistoryForUser(@PathVariable Long chatId) {
-        messageService.deleteChatHistoryForUser(chatId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/deleteChatHistoryForAllUsers/{chatId}")
-    public ResponseEntity<Void> deleteChatHistoryForAllUsers(@PathVariable Long chatId) {
-        messageService.deleteChatHistoryForAllUsers(chatId);
+    @PostMapping("/deleteChatHistoryForAllUsers/{chat_id}")
+    public ResponseEntity<Void> deleteChatHistoryForAllUsers(@PathVariable Long chat_id) {
+        messageService.deleteChatHistoryForAllUsers(chat_id);
         return ResponseEntity.ok().build();
     }
 
 }
-
