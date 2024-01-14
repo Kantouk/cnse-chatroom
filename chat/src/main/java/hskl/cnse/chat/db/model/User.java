@@ -2,8 +2,6 @@ package hskl.cnse.chat.db.model;
 
 
 import java.util.Collection;
-import java.util.List; // Import für java.util.List hinzufügen
-import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -48,6 +46,10 @@ public class User {
     @OneToMany(mappedBy = "participants")
     private Collection<Chat> chats;
 
+    public User() {
+        
+    }
+
     public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
         super();
         this.firstName = firstName;
@@ -57,9 +59,7 @@ public class User {
         this.roles = roles;
     }
 
-    public User() {
-        
-    }
+    
 
     public Long getId() {
         return id;
@@ -101,20 +101,29 @@ public class User {
         this.password = password;
     }
 
-    public List<String> getRoles() {
-        return roles.stream() // Stream aus Rollen erstellen
-                .map(Role::getName)  // Rolle in String umwandeln
-                .collect(Collectors.toList()); // Liste der Rollen zurückgeben
+    public Collection<Role> getRoles() {
+        return roles;
     }
-    
-    
+
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
-    
-    
 
-    
+    public Collection<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Collection<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Collection<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(Collection<Chat> chats) {
+        this.chats = chats;
+    }
     
 
 }

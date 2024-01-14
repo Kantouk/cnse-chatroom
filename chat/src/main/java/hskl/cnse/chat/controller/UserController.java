@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import hskl.cnse.chat.db.dto.UserRegistrationDto;
+import hskl.cnse.chat.db.model.Role;
 import hskl.cnse.chat.db.model.User;
 import hskl.cnse.chat.db.repositories.RoleRepository;
 import hskl.cnse.chat.db.repositories.UserRepository;
@@ -45,11 +46,25 @@ public class UserController {
             return "registration"; // Formular erneut anzeigen mit Fehlermeldungen
         }
 
+        /* 
+         // Prüfe ob die E-Mail ein @ Zeichen besitzt
+         if (!userRegistrationDto.getEmail().contains("@")) {
+            return "registration";
+        }
+
+        // Prüfe ob die E-Mail bereits vergeben ist
+        if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
+            return "registration";
+        }// Prüfe ob die E-Mail ein @ Zeichen besitzt
+
         // Validiere das Passwort auf Mindestlänge
         if (userRegistrationDto.getPassword().length() < 1) {
             return "registration";
         }
 
+        */
+
+        // Erstelle ein neues Benutzerobjekt
         User user = new User();
         user.setEmail(userRegistrationDto.getEmail());
         user.setFirstName(userRegistrationDto.getFirstName());
@@ -57,10 +72,14 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
 
         // Setze die Standardrolle für den Benutzer (z.B., "USER")
-        user.setRoles(Collections.singleton(roleRepository.findByName("USER")));
+        String roleName = userRegistrationDto.getRole() != null ? userRegistrationDto.getRole() : "USER";
+        Role userRole = new Role(roleName);
+        user.setRoles(Collections.singletonList(userRole));
+
 
         // Speichere den Benutzer in der Datenbank
         userRepository.save(user);
+        roleRepository.save(userRole); //
 
         // Logge Informationen über die Registrierung
         logger.info("*********************************************************************************");
@@ -74,6 +93,6 @@ public class UserController {
         logger.info("*********************************************************************************");
 
         // Weiterleitung zur Chat-Seite oder einer Bestätigungsseite
-        return "redirect:/index";
+        return "chat";
     }
 }
