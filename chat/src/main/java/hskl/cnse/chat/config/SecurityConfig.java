@@ -21,15 +21,9 @@ public class SecurityConfig {
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 return http
                                 .authorizeHttpRequests(auth -> {
-                                        auth.requestMatchers("/").permitAll();
-                                        auth.requestMatchers("/register").permitAll();
-                                        auth.requestMatchers("/favicon.ico").permitAll();
-                                        auth.requestMatchers("/swagger-ui/**").permitAll();
+                                        auth.requestMatchers("/","/register", "/favicon.ico","/swagger-ui/**", "/login**","/styles/**", "/scripts/**").permitAll();
                                         auth.requestMatchers("/actuator/**").hasRole("ADMIN");
-                                        auth.requestMatchers("/secured/**").hasRole("USER");
-                                        auth.requestMatchers("/index.html").hasRole("USER");
-                                        auth.requestMatchers("/script.js").permitAll();
-                                        auth.requestMatchers("/styles.js").permitAll();
+                                        auth.requestMatchers("/chat","/index","/secured/**").hasRole("USER");
                                         auth.anyRequest().authenticated();
                                 })
                                 .oauth2Login(oauth2 -> oauth2

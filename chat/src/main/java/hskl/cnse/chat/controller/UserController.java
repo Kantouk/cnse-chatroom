@@ -55,7 +55,7 @@ public class UserController {
         // Prüfe ob die E-Mail bereits vergeben ist
         if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
             return "registration";
-        }// Prüfe ob die E-Mail ein @ Zeichen besitzt
+        }
 
         // Validiere das Passwort auf Mindestlänge
         if (userRegistrationDto.getPassword().length() < 1) {
@@ -93,6 +93,6 @@ public class UserController {
         logger.info("*********************************************************************************");
 
         // Weiterleitung zur Chat-Seite oder einer Bestätigungsseite
-        return "index";
+        return "chat";
     }
 }

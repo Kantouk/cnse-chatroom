@@ -1,5 +1,8 @@
 package hskl.cnse.chat.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,8 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+        this.userRepository = userRepository; // Initialisiere das Feld im Konstruktor
     }
+
+    // Andere Methoden hier
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -25,10 +30,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Benutzer nicht gefunden: " + username);
         }
 
+        List<String> roles = user.getRoles().stream()
+                                      .map(role -> role.getName())
+                                      .collect(Collectors.toList());
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
-                .roles(user.getRoles().iterator().next().getName())
+                .roles(roles.toArray(new String[0]))
                 .build();
     }
 }
