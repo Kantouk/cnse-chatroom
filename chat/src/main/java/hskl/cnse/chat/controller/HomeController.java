@@ -12,6 +12,12 @@ public class HomeController {
         return "login";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        // Deine Logik zum Bearbeiten des "/"-Endpunkts
+        return "login";
+    }
+
     @GetMapping("/index")
     public String index() {
         // Deine Logik zum Bearbeiten des "/index.html"-Endpunkts
