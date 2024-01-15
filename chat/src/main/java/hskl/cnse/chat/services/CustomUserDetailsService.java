@@ -1,18 +1,18 @@
 package hskl.cnse.chat.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import hskl.cnse.chat.db.model.User;
+import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.db.repositories.UserRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService, UserDetailsPasswordService {
 
     private final UserRepository userRepository;
 
@@ -21,23 +21,21 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     // Andere Methoden hier
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
-
+        AuthUser user = userRepository.findByEmail(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Benutzer nicht gefunden: " + username);
+            throw new UsernameNotFoundException("User not found");
         }
-
-        List<String> roles = user.getRoles().stream()
-                                      .map(role -> role.getName())
-                                      .collect(Collectors.toList());
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(roles.toArray(new String[0]))
-                .build();
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
+
+    @Override
+    public UserDetails updatePassword(UserDetails user, String newPassword) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
+    }
+
+
+    
 }

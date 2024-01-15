@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,59 +14,75 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import hskl.cnse.chat.db.dto.UserRegistrationDto;
+import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.db.model.Role;
-import hskl.cnse.chat.db.model.User;
 import hskl.cnse.chat.db.repositories.RoleRepository;
 import hskl.cnse.chat.db.repositories.UserRepository;
 
 @Controller
 public class UserController {
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final RoleRepository roleRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository userRepository, RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
+    /* 
+    @GetMapping
+    public Response handleGet(@AuthenticationPrincipal AuthUser authUser) {
+        if (authUser.getRoles().contains("USER")) {
+            // handle request
+        }
+        // ...
+    }
+    */
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new AuthUser());
         return "registration";
     }
 
+
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("userRegistrationDto") UserRegistrationDto userRegistrationDto, BindingResult result) {
+    public String registerUser(@ModelAttribute("userRegistrationDto") UserRegistrationDto userRegistrationDto,
+            BindingResult result) {
 
         // Überprüfe die Benutzereingabe
         if (result.hasErrors()) {
             return "registration"; // Formular erneut anzeigen mit Fehlermeldungen
         }
 
-        /* 
-         // Prüfe ob die E-Mail ein @ Zeichen besitzt
-         if (!userRegistrationDto.getEmail().contains("@")) {
-            return "registration";
-        }
-
-        // Prüfe ob die E-Mail bereits vergeben ist
-        if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
-            return "registration";
-        }
-
-        // Validiere das Passwort auf Mindestlänge
-        if (userRegistrationDto.getPassword().length() < 1) {
-            return "registration";
-        }
-
-        */
+        /*
+         * // Prüfe ob die E-Mail ein @ Zeichen besitzt
+         * if (!userRegistrationDto.getEmail().contains("@")) {
+         * return "registration";
+         * }
+         * 
+         * // Prüfe ob die E-Mail bereits vergeben ist
+         * if (userRepository.findByEmail(userRegistrationDto.getEmail()) != null) {
+         * return "registration";
+         * }
+         * 
+         * // Validiere das Passwort auf Mindestlänge
+         * if (userRegistrationDto.getPassword().length() < 1) {
+         * return "registration";
+         * }
+         * 
+         */
 
         // Erstelle ein neues Benutzerobjekt
-        User user = new User();
+        AuthUser user = new AuthUser();
         user.setEmail(userRegistrationDto.getEmail());
         user.setFirstName(userRegistrationDto.getFirstName());
         user.setLastName(userRegistrationDto.getLastName());
@@ -75,7 +92,6 @@ public class UserController {
         String roleName = userRegistrationDto.getRole() != null ? userRegistrationDto.getRole() : "USER";
         Role userRole = new Role(roleName);
         user.setRoles(Collections.singletonList(userRole));
-
 
         // Speichere den Benutzer in der Datenbank
         userRepository.save(user);
@@ -93,6 +109,6 @@ public class UserController {
         logger.info("*********************************************************************************");
 
         // Weiterleitung zur Chat-Seite oder einer Bestätigungsseite
-        return "chat";
+        return "redirect:/chat.html";
     }
 }
