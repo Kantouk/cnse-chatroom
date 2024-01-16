@@ -27,6 +27,12 @@ public class ChatService {
     }
 
     public Chat createChat(ChatCreationDto chatCreationDto) {
+        logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
+        logger.info("ChatService: createChat() wurde aufgerufen!");
+        logger.info("ChatService: createChat() hat folgende Parameter erhalten: " + chatCreationDto.toString());
+        logger.info("*********************************************************************************");
+        logger.info("*********************************************************************************");
         Chat chat = new Chat();
         chat.setName(chatCreationDto.getName());
         chat.setPassword(passwordEncoder.encode(chatCreationDto.getPassword()));

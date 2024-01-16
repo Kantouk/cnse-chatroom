@@ -44,4 +44,11 @@ public class ChatCreationDto {
         this.participants = participants;
     }
 
+    @Override
+    public String toString() {
+        return "ChatCreationDto [name=" + name + ", password=" + password + ", participants=" + participants.toString() + "]";
+    }
+
+    
+
 }
