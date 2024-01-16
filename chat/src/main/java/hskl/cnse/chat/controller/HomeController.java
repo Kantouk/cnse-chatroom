@@ -23,4 +23,10 @@ public class HomeController {
         // Deine Logik zum Bearbeiten des "/index.html"-Endpunkts
         return "index"; // Hier wird angenommen, dass "index" der Name deiner HTML-Vorlage oder Ansicht ist
     }
+
+    @GetMapping("/chat")
+    public String chat() {
+        // Deine Logik zum Bearbeiten des "/chat.html"-Endpunkts
+        return "chat"; // Hier wird angenommen, dass "chat" der Name deiner HTML-Vorlage oder Ansicht ist
+    }
 }
