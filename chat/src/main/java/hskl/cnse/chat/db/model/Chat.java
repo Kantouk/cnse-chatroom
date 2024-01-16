@@ -23,7 +23,7 @@ public class Chat {
     private List<Message> messages;
 
     @ManyToMany
-    private List<AuthUser> participants;
+    private List<User> participants;
 
     public Chat() {
     }
@@ -70,23 +70,23 @@ public class Chat {
         this.messages = message;
     }
 
-    public void setParticipants(List<AuthUser> users) {
+    public void setParticipants(List<User> users) {
         this.participants = users;
     }
 
-    public List<AuthUser> getParticipants() {
+    public List<User> getParticipants() {
         return participants;
     }
 
-    public void addParticipant(AuthUser user) {
+    public void addParticipant(User user) {
         this.participants.add(user);
     }
 
-    public void removeParticipant(AuthUser user) {
+    public void removeParticipant(User user) {
         this.participants.remove(user);
     }
 
-    public boolean hasUser(AuthUser user) {
+    public boolean hasUser(User user) {
         return this.participants.contains(user);
     }
 
