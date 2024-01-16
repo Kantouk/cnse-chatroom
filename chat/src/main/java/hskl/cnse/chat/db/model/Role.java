@@ -24,4 +24,11 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     private List<AuthUser> users;
+
+    @Override
+    public String toString() {
+        return "Role [id=" + id + ", name=" + name + ", users=" + users + "]";
+    }
+
+    
 }

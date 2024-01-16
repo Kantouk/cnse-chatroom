@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,14 +24,17 @@ public class Message {
 
     private String content;
 
+    @JsonIgnore
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AuthUser user;
@@ -80,6 +86,20 @@ public class Message {
 
     public void setChat(Chat chat) {
         this.chat = chat;
+    }
+
+    public boolean hasUser(){
+        return user != null;
+    }
+
+    public boolean hasChat(){
+        return chat != null;
+    }
+
+    @Override
+    public String toString() {
+        return "Message [id=" + id + ", content=" + content + ", timestamp=" + timestamp.toString() + ", chat=" + hasChat() + ", user="
+                + hasUser() + "]";
     }
 
 }
