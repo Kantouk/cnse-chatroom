@@ -1,5 +1,20 @@
 // JavaScript
 
+// Funktion zum Anmelden
+function logout() {
+    // Extrahiere den Ursprung (Origin) der aktuellen Anwendung
+    const currentOrigin = window.location.origin;
+
+    // Baue den vollständigen Pfad zur Logout-Route
+    const logoutPath = '/logout';
+
+    // Konstruiere die vollständige URL
+    const logoutURL = currentOrigin + logoutPath;
+
+    // Führe den Logout durch (z.B., leite zur Logout-URL weiter)
+    window.location.href = logoutURL;
+}
+
 // Funktion zum Öffnen des Modals
 function openCreateRoomModal() {
     var modal = document.getElementById('roomModal');

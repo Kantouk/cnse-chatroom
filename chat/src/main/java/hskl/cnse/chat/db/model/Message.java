@@ -31,18 +31,18 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private AuthUser user;
 
     public Message() {
     }
 
-    public Message(String content, User sender, LocalDateTime timestamp) {
+    public Message(String content, AuthUser sender, LocalDateTime timestamp) {
         this.content = content;
         this.user = sender;
         this.timestamp = timestamp;
     }
 
-    public Message(Long id, String content, User sender, LocalDateTime timestamp) {
+    public Message(Long id, String content, AuthUser sender, LocalDateTime timestamp) {
         this.id = id;
         this.content = content;
         this.user = sender;
@@ -63,6 +63,14 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public AuthUser getUserId() {
+        return user;
+    }
+
+    public void setUserId(AuthUser sender) {
+        this.user = sender;
     }
 
     public LocalDateTime getTimestamp() {

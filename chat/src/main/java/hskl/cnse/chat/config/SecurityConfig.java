@@ -1,15 +1,12 @@
 package hskl.cnse.chat.config;
 
-import static org.springframework.security.config.Customizer.*;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -18,67 +15,59 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
         @Bean
-        SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                return http
-                                .authorizeHttpRequests(auth -> {
-                                        auth.requestMatchers("/").permitAll();
-                                        auth.requestMatchers("/register").permitAll();
-                                        auth.requestMatchers("/favicon.ico").permitAll();
-                                        auth.requestMatchers("/swagger-ui/**").permitAll();
-                                        auth.requestMatchers("/actuator/**").hasRole("ADMIN");
-                                        auth.requestMatchers("/secured/**").hasRole("USER");
-                                        auth.anyRequest().authenticated();
-                                })
-                                .oauth2Login(oauth2 -> oauth2
-                                                .defaultSuccessUrl("/index.html", true))
-                                .formLogin(withDefaults()) /* TODO: Joshua Login Page anfertigen */
-                                .logout(logout -> logout
-                                                .logoutSuccessUrl("/index.html")
-                                                )
-                                .build();
-        }
-
-       
-
-
-        @Bean
-        public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
-                        PasswordEncoder passwordEncoder) {
-                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-                provider.setUserDetailsService(userDetailsService);
-                provider.setPasswordEncoder(passwordEncoder);
-                return provider;
-        }
-
-        @Bean
         public PasswordEncoder passwordEncoder() {
-                return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+                return new BCryptPasswordEncoder();
         }
 
-        /* 
+        // @Bean
+        // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // http
+        // .csrf(AbstractHttpConfigurer::disable)
+        // .authorizeHttpRequests((authorize) ->
+        // authorize.requestMatchers("/register/**", "/styles.css", "/scripts.js")
+        // .permitAll()
+        // .requestMatchers("/index").permitAll()
+        // .requestMatchers("/chat").hasRole("ADMIN"))
+        // .formLogin(
+        // form -> form
+        // .loginPage("/login")
+        // .loginProcessingUrl("/login")
+        // .defaultSuccessUrl("/chat")
+        // .permitAll())
+        // .logout(
+        // logout -> logout
+        // .logoutRequestMatcher(
+        // new AntPathRequestMatcher("/logout"))
+        // .permitAll());
+        // return http.build();
+        // }
+
         @Bean
-        public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-                UserDetails user1 = User.withUsername("user1")
-                                .password(passwordEncoder.encode("password"))
-                                .roles("USER")
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                return http
+                                .authorizeHttpRequests(
+                                                authorizeHttp -> {
+                                                        authorizeHttp.requestMatchers("/").permitAll();
+                                                        authorizeHttp.requestMatchers("/favicon.svg").permitAll();
+                                                        authorizeHttp.requestMatchers("/error").permitAll();
+                                                        authorizeHttp.requestMatchers("/register").permitAll();
+                                                        authorizeHttp.requestMatchers("/login").permitAll();
+                                                        authorizeHttp.requestMatchers("/chat").hasRole("ADMIN");
+                                                        authorizeHttp.requestMatchers("static/css/**").permitAll();
+                                                        authorizeHttp.requestMatchers("static/js/**").permitAll();
+                                                        authorizeHttp.anyRequest().authenticated();
+                                                })
+                                .formLogin(withDefaults())
+                                .formLogin(
+                                                form -> form
+                                                                .loginPage("/login")
+                                                                .loginProcessingUrl("/login")
+                                                                .defaultSuccessUrl("/chat")
+                                                                .permitAll())
+                                .oauth2Login(withDefaults())
+                                .httpBasic(withDefaults())
                                 .build();
+        }
 
-                UserDetails user2 = User.withUsername("user2")
-                                .password(passwordEncoder.encode("password"))
-                                .roles("USER")
-                                .build();
-
-                UserDetails user3 = User.withUsername("user3")
-                                .password(passwordEncoder.encode("password"))
-                                .roles("USER")
-                                .build();
-
-                UserDetails admin = User.withUsername("admin")
-                                .password(passwordEncoder.encode("adminpassword"))
-                                .roles("ADMIN")
-                                .build();
-
-                return new InMemoryUserDetailsManager(user1, user2, user3, admin);
-        } */
 
 }

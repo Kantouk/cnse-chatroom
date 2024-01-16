@@ -62,6 +62,21 @@ body {
     text-align: center; /* Zentrierte Schrift */
 }
 
+
+.logout-btn {
+    background-color: red;
+    color: white; /* Damit der Text besser sichtbar ist, weiß setzen */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background-color: darkred; /* Farbe ändern, wenn der Mauszeiger über dem Button ist */
+}
+
+
 /* Weitere Anpassungen je nach Bedarf... */
 
 .chat-container {
