@@ -4,7 +4,6 @@ package hskl.cnse.chat.db.dto;
 import hskl.cnse.chat.db.model.Chat;
 import hskl.cnse.chat.db.model.User;
 
-
 public class MessageCreationData {
 
     private String content;

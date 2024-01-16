@@ -44,5 +44,4 @@ public class ChatCreationDto {
         this.participants = participants;
     }
 
-    
 }
