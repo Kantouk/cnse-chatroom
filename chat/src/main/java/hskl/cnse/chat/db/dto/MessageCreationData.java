@@ -1,19 +1,19 @@
 package hskl.cnse.chat.db.dto;
 
 
+import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.db.model.Chat;
-import hskl.cnse.chat.db.model.User;
 
 public class MessageCreationData {
 
     private String content;
     private Chat chat;
-    private User user;
+    private AuthUser user;
 
     public MessageCreationData() {
     }
 
-    public MessageCreationData(String content, Chat chat, User user) {
+    public MessageCreationData(String content, Chat chat, AuthUser user) {
         this.content = content;
         this.chat = chat;
         this.user = user;
@@ -35,11 +35,11 @@ public class MessageCreationData {
         this.chat = chat;
     }
 
-    public User getUser() {
+    public AuthUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AuthUser user) {
         this.user = user;
     }
 

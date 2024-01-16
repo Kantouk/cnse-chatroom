@@ -1,20 +1,21 @@
 package hskl.cnse.chat.db.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import hskl.cnse.chat.db.model.User;
+import hskl.cnse.chat.db.model.AuthUser;
 
 
 public class ChatCreationDto {
     
     private String name;
     private String password;
-    private List<User> participants;
+    private List<AuthUser> participants = new ArrayList<>();
 
     public ChatCreationDto() {
     }
 
-    public ChatCreationDto(String name, String password, List<User> participants) {
+    public ChatCreationDto(String name, String password, List<AuthUser> participants) {
         this.name = name;
         this.password = password;
         this.participants = participants;
@@ -36,11 +37,11 @@ public class ChatCreationDto {
         this.password = password;
     }
 
-    public List<User> getParticipants() {
+    public List<AuthUser> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(List<AuthUser> participants) {
         this.participants = participants;
     }
 

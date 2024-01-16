@@ -19,11 +19,11 @@ public class MessageService {
         return messageRepository.findByChat_Id(chat_id);
     }
 
-    public Message sendMessage(MessageCreationData messagecCreationData) {
+    public Message sendMessage(MessageCreationData messageCreationData) {
         Message message = new Message();
-        message.setContent(messagecCreationData.getContent());
-        message.setChat(messagecCreationData.getChat());
-        message.setUser(messagecCreationData.getUser());
+        message.setContent(messageCreationData.getContent());
+        message.setChat(messageCreationData.getChat());
+        message.setUser(messageCreationData.getUser());
 
         return messageRepository.save(message);
     }

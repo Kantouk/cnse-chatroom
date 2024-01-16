@@ -10,13 +10,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hskl.cnse.chat.db.dto.ChatCreationDto;
+import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.db.model.Chat;
 import hskl.cnse.chat.db.repositories.ChatRepository;
+import hskl.cnse.chat.db.repositories.UserRepository;
 
 @Service
 public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(ChatService.class);
@@ -42,7 +46,7 @@ public class ChatService {
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
         logger.info("Chat " + chat.getName() + " wurde erfolgreich erstellt!");
-        logger.info("Chat " + chat.getName() + " hat folgende Teilnehmer: " + chat.getParticipants().toString());
+        logger.info("Chat " + chat.getName() + " hat folgende Teilnehmer: " + chat.getParticipants().isEmpty());
         logger.info("Chat " + chat.getName() + " hat folgendes Passwort: " + chat.getPassword());
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
@@ -78,19 +82,21 @@ public class ChatService {
         return chatRepository.findById(chatId).orElse(null);
     }
 
-    /*public void addParticipant(Long chatId, Long userId) {
+    public void addParticipant(@NonNull Long chatId, @NonNull Long userId) {
         // Teilnehmer hinzufügen
         Chat chat = chatRepository.findById(chatId).orElse(null);
-        chat.getParticipants().add(userId);
+        AuthUser user = userRepository.findById(userId).orElse(null);
+        chat.getParticipants().add(user);
         chatRepository.save(chat);
     }
 
-    public void removeParticipant(Long chatId, Long userId) {
+    public void removeParticipant(@NonNull Long chatId, @NonNull Long userId) {
         // Teilnehmer entfernen
         Chat chat = chatRepository.findById(chatId).orElse(null);
-        chat.getParticipants().remove(userId);
+        AuthUser user = userRepository.findById(userId).orElse(null);
+        chat.getParticipants().remove(user);
         chatRepository.save(chat);
-    }*/
+    }
 
 }
 
