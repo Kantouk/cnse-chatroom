@@ -64,17 +64,17 @@ public class ChatController {
         return ResponseEntity.ok(chat);
     }
 
-    /*@PostMapping("/addParticipant/{chatId}/{userId}")
-    public ResponseEntity<Void> addParticipant(@PathVariable Long chatId, @PathVariable Long userId) {
+    @PostMapping("/addParticipant/{chatId}/{userId}")
+    public ResponseEntity<Void> addParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
         chatService.addParticipant(chatId, userId);
         return ResponseEntity.ok().build();
-    }*/
+    }
 
-    /*@PostMapping("/removeParticipant/{chatId}/{userId}")
-    public ResponseEntity<Void> removeParticipant(@PathVariable Long chatId, @PathVariable Long userId) {
+    @PostMapping("/removeParticipant/{chatId}/{userId}")
+    public ResponseEntity<Void> removeParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
         chatService.removeParticipant(chatId, userId);
         return ResponseEntity.ok().build();
-    }*/
+    }
 
     
 }

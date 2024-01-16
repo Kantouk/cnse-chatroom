@@ -2,6 +2,9 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,11 +22,13 @@ public class Chat {
     @Nullable
     private String password;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "chat")
     private List<Message> messages;
 
+    @JsonBackReference
     @ManyToMany
-    private List<User> participants;
+    private List<AuthUser> participants;
 
     public Chat() {
     }
@@ -70,24 +75,31 @@ public class Chat {
         this.messages = message;
     }
 
-    public void setParticipants(List<User> users) {
+    public void setParticipants(List<AuthUser> users) {
         this.participants = users;
     }
 
-    public List<User> getParticipants() {
+    public List<AuthUser> getParticipants() {
         return participants;
     }
 
-    public void addParticipant(User user) {
+    public void addParticipant(AuthUser user) {
         this.participants.add(user);
     }
 
-    public void removeParticipant(User user) {
+    public void removeParticipant(AuthUser user) {
         this.participants.remove(user);
     }
 
-    public boolean hasUser(User user) {
+    public boolean hasUser(AuthUser user) {
         return this.participants.contains(user);
     }
+
+    @Override
+    public String toString() {
+        return "Chat [id=" + id + ", name=" + name + ", password=" + password + ", messages=" + messages
+                + ", participants=" + participants + "]";
+    }
+
 
 }

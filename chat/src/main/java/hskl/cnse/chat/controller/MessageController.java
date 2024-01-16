@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hskl.cnse.chat.db.dto.MessageCreationData;
 import hskl.cnse.chat.db.model.Message;
 import hskl.cnse.chat.services.MessageService;
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/messages")
@@ -55,15 +56,16 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/deleteChatHistoryForAllUsers/{chat_id}")
+    @Transactional
+    @PostMapping("/deleteHistory/{chat_id}")
     public ResponseEntity<Void> deleteChatHistoryForAllUsers(@PathVariable @NonNull Long chat_id) {
         messageService.deleteChatHistoryForAllUsers(chat_id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{messageId}")
-    public ResponseEntity<Message> getMessageById(@PathVariable @NonNull Long chatId) {
-        Message message = messageService.getMessageById(chatId);
+    public ResponseEntity<Message> getMessageById(@PathVariable @NonNull Long messageId) {
+        Message message = messageService.getMessageById(messageId);
         return ResponseEntity.ok(message);
     }
 
