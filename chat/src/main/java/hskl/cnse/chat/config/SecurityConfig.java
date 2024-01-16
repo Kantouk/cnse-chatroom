@@ -1,86 +1,73 @@
 package hskl.cnse.chat.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-        @Autowired
-        private UserDetailsService userDetailsService;
 
         @Bean
-        public static PasswordEncoder passwordEncoder() {
+        public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
 
         // @Bean
         // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //         http
-        //                         .csrf(AbstractHttpConfigurer::disable)
-        //                         .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/register/**", "/styles.css", "/scripts.js")
-        //                                         .permitAll()
-        //                                         .requestMatchers("/index").permitAll()
-        //                                         .requestMatchers("/chat").hasRole("ADMIN"))
-        //                         .formLogin(
-        //                                         form -> form
-        //                                                         .loginPage("/login")
-        //                                                         .loginProcessingUrl("/login")
-        //                                                         .defaultSuccessUrl("/chat")
-        //                                                         .permitAll())
-        //                         .logout(
-        //                                         logout -> logout
-        //                                                         .logoutRequestMatcher(
-        //                                                                         new AntPathRequestMatcher("/logout"))
-        //                                                         .permitAll());
-        //         return http.build();
+        // http
+        // .csrf(AbstractHttpConfigurer::disable)
+        // .authorizeHttpRequests((authorize) ->
+        // authorize.requestMatchers("/register/**", "/styles.css", "/scripts.js")
+        // .permitAll()
+        // .requestMatchers("/index").permitAll()
+        // .requestMatchers("/chat").hasRole("ADMIN"))
+        // .formLogin(
+        // form -> form
+        // .loginPage("/login")
+        // .loginProcessingUrl("/login")
+        // .defaultSuccessUrl("/chat")
+        // .permitAll())
+        // .logout(
+        // logout -> logout
+        // .logoutRequestMatcher(
+        // new AntPathRequestMatcher("/logout"))
+        // .permitAll());
+        // return http.build();
         // }
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-         .authorizeHttpRequests(
-                authorizeHttp -> {
-                        authorizeHttp.requestMatchers("/").permitAll();
-                        authorizeHttp.requestMatchers("/favicon.svg").permitAll();
-                        authorizeHttp.requestMatchers("/error").permitAll();
-                        authorizeHttp.requestMatchers("/register").permitAll();
-                        authorizeHttp.requestMatchers("/login").permitAll();
-                        authorizeHttp.requestMatchers("/chat").hasRole("ADMIN");
-                        authorizeHttp.requestMatchers("/css/*").permitAll();
-                        authorizeHttp.requestMatchers("/js/*").permitAll();
-                        authorizeHttp.anyRequest().authenticated();
-                }
-        )
-                .formLogin(withDefaults())
-                                        .formLogin(
+                return http
+                                .authorizeHttpRequests(
+                                                authorizeHttp -> {
+                                                        authorizeHttp.requestMatchers("/").permitAll();
+                                                        authorizeHttp.requestMatchers("/favicon.svg").permitAll();
+                                                        authorizeHttp.requestMatchers("/error").permitAll();
+                                                        authorizeHttp.requestMatchers("/register").permitAll();
+                                                        authorizeHttp.requestMatchers("/login").permitAll();
+                                                        authorizeHttp.requestMatchers("/chat").hasRole("ADMIN");
+                                                        authorizeHttp.requestMatchers("static/css/**").permitAll();
+                                                        authorizeHttp.requestMatchers("static/js/**").permitAll();
+                                                        authorizeHttp.anyRequest().authenticated();
+                                                })
+                                .formLogin(withDefaults())
+                                .formLogin(
                                                 form -> form
                                                                 .loginPage("/login")
                                                                 .loginProcessingUrl("/login")
                                                                 .defaultSuccessUrl("/chat")
                                                                 .permitAll())
-                .oauth2Login(withDefaults())
-                .httpBasic(withDefaults())
-                .build();
-     }
+                                .oauth2Login(withDefaults())
+                                .httpBasic(withDefaults())
+                                .build();
+        }
 
-     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
 
 }
