@@ -42,12 +42,25 @@ public class UserController {
                     "There is already an account registered with the same email");
         }
 
+        
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
+            System.out.println("#################################################################################");
+            System.out.println("Error: " + result.getAllErrors().toString());
+            System.out.println("#################################################################################");
+        } else {
+            userService.saveUser(userDto);
+            AuthUser savedUser = userService.findUserByEmail(userDto.getEmail());
+
+            
+            System.out.println("#################################################################################");
+            System.out.println("Roles for user " + savedUser.getEmail() + ": " + savedUser.getRoles());
+            System.out.println("#################################################################################");
+
+            return "redirect:/register?success";
         }
 
-        userService.saveUser(userDto);
-        return "redirect:/register?success";
+        return "redirect:/index";
     }
 
     // handler method to handle list of users
