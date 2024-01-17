@@ -111,6 +111,13 @@ jobs:
             #'${{ secrets.GOOGLE_CREDENTIALS }}'
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
+      - name: Debug
+        run: |
+          echo "GAR_LOCATION: ${{ env.GAR_LOCATION }}"
+          echo "PROJECT_ID: ${{ env.PROJECT_ID }}"
+          echo "SERVICE: ${{ env.SERVICE }}"
+          echo "github.sha: ${{ github.sha }}"    
+
       - name: Build and Push Container
         run: |-
           docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./chat
