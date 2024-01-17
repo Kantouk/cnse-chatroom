@@ -98,7 +98,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message [id=" + id + ", content=" + content + ", timestamp=" + timestamp.toString() + ", chat=" + hasChat() + ", user="
+        return "Message [id=" + id + ", content=" + content + ", chat=" + hasChat() + ", user="
                 + hasUser() + "]";
     }
 
