@@ -50,7 +50,7 @@ on:
 
 env:
   PROJECT_ID: optical-mind-406809
-  GAR_LOCATION: europe-west1-docker.pkg.dev/optical-mind-406809/cloud-chat
+  GAR_LOCATION: europe-west1
   SERVICE: cloud-chat
   REGION: europe-west1
 
