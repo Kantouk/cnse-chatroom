@@ -3,7 +3,6 @@ package hskl.cnse.chat.db.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -54,11 +53,10 @@ public class AuthUser {
     private List<Role> roles = new ArrayList<>();
 
     @JsonManagedReference("user-message")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
     
-    @JsonBackReference("chat-users")
-    @ManyToMany(mappedBy = "participants")
+    @ManyToMany(mappedBy = "participants", fetch = FetchType.LAZY)
     private List<Chat> chats = new ArrayList<>();
 
     @Override
