@@ -1,7 +1,8 @@
 package hskl.cnse.chat.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.config.Customizer.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,37 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import hskl.cnse.chat.services.OAuth2AuthenticationSuccessHandler;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
-
-        // @Bean
-        // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // http
-        // .csrf(AbstractHttpConfigurer::disable)
-        // .authorizeHttpRequests((authorize) ->
-        // authorize.requestMatchers("/register/**", "/styles.css", "/scripts.js")
-        // .permitAll()
-        // .requestMatchers("/index").permitAll()
-        // .requestMatchers("/chat").hasRole("ADMIN"))
-        // .formLogin(
-        // form -> form
-        // .loginPage("/login")
-        // .loginProcessingUrl("/login")
-        // .defaultSuccessUrl("/chat")
-        // .permitAll())
-        // .logout(
-        // logout -> logout
-        // .logoutRequestMatcher(
-        // new AntPathRequestMatcher("/logout"))
-        // .permitAll());
-        // return http.build();
-        // }
+         @Autowired
+         private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,7 +31,7 @@ public class SecurityConfig {
                                                         authorizeHttp.requestMatchers("/error").permitAll();
                                                         authorizeHttp.requestMatchers("/register").permitAll();
                                                         authorizeHttp.requestMatchers("/login").permitAll();
-                                                        authorizeHttp.requestMatchers("/chat").hasRole("ADMIN");
+                                                        authorizeHttp.requestMatchers("/chat").hasAnyAuthority("ADMIN","OIDC_USER");
                                                         authorizeHttp.requestMatchers("static/css/**").permitAll();
                                                         authorizeHttp.requestMatchers("static/js/**").permitAll();
                                                         authorizeHttp.anyRequest().authenticated();
@@ -64,10 +42,18 @@ public class SecurityConfig {
                                                                 .loginProcessingUrl("/login")
                                                                 .defaultSuccessUrl("/chat")
                                                                 .permitAll())
-                                .oauth2Login(withDefaults())
+                                .oauth2Login(
+                                                oauth2 -> oauth2
+                                                                .loginPage("/login")
+                                                                .defaultSuccessUrl("/chat")
+                                                                .successHandler(oAuth2AuthenticationSuccessHandler))
                                 .httpBasic(withDefaults())
                                 .build();
         }
 
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
 }
