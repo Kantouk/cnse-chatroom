@@ -19,7 +19,6 @@ import jakarta.persistence.ManyToOne;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(insertable = false, updatable = false)
     private Long id;
 
     private String content;
@@ -29,12 +28,12 @@ public class Message {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
-    @JsonBackReference
+    @JsonBackReference("chat-message")
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @JsonBackReference
+    @JsonBackReference("user-message")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AuthUser user;

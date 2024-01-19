@@ -2,7 +2,6 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.micrometer.common.lang.Nullable;
@@ -10,8 +9,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Chat {
@@ -22,12 +22,16 @@ public class Chat {
     @Nullable
     private String password;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "chat")
+    @JsonManagedReference("chat-message")
+    @ManyToMany(mappedBy = "chat")
     private List<Message> messages;
 
-    @JsonBackReference
+    @JsonManagedReference("chat-users")
     @ManyToMany
+    @JoinTable(
+        name = "chat_user",
+        joinColumns = {@JoinColumn(name = "CHAT_ID", referencedColumnName = "ID")},
+        inverseJoinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
     private List<AuthUser> participants;
 
     public Chat() {
@@ -97,8 +101,7 @@ public class Chat {
 
     @Override
     public String toString() {
-        return "Chat [id=" + id + ", name=" + name + ", password=" + password + ", messages=" + messages
-                + ", participants=" + participants + "]";
+        return "Chat [id=" + id + ", name=" + name + ", password=" + password + "]";
     }
 
 
