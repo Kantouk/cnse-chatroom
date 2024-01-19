@@ -27,23 +27,8 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '{
-            "type": "service_account",
-            "project_id": "optical-mind-406809",
-            "private_key_id": "f8d5ec39e7e1135b39cdae7ada25831db6e417b8",
-            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDJEA1Xc/LQCvlx\ndp0+C1xXa19ALwL3tM+lKfEJ+tqAOoGc7AP9oFcY9PRrVE8pyc3S20CmZlXU8kkD\n36a41qPBodFl0kxO4jd0eqIAsp61f37e5oZtbuzDv9nVtZDNp3sex5oI2sbF3WSE\n8RNLp49PaH9UsMvUF4kfSWCXzgKqdIeUTkuI0f6F/1yxzg93iGE9sprrw1qd/aRD\nUvNOiZr7u21aopn0ZFTwfZddxcqxOvXrV7ytn+4M1YPoAGlsgU12ftQ4kZT/gVkB\nFvgus86lnpFCT+kba7k8ytWPS87pbBGPYl2dYSPZ/VA1c8/t01aJn0dzcpUrwl3f\ndqwSbqH7AgMBAAECggEAXwXcGFGvFs2o+AvD4rfBy3ruSEovj9v/KqK4zSumKmX8\nLaqJdEtb/mp+PV9aDnjWcmm2ky3YMMzU3yTLCZ4/RFryuLl74Ogep0jx2XyRb1uz\nHSs7qup6sUSxccPejKMzl+djj/29ZXPtdrrskJu/KhtL2j24ByOcZZHrObNeJSoY\nzoWM2BjGjiac5ruxaSCbxDJ0+uzFk9lnFVQ5VtWEH4V456/8D346FQsBZ4Q6lvXx\n4dxSZpyDJ2HCqoZz4wKIvT/AxLLl3TrhSdW6IPqvP1Cmc2U15PfEREUV+bYpoVZw\n2FaQUpW0ZE4LNpygR0CtWDQBnyZbXj1EUnEn2RzPCQKBgQDvLYfUC+2Dm/lTzFFH\n9StzqNpLSh8sBx+APp/SBMA5AXUrxvBWXQHErzWAN6ekKl5aLOZ//ENl9wGTb7NL\nh3XJpx9r0AAyqUiG4mhnrXWGSGcPY1Z5Vwv3EyS8hH+RBLCZqZrVM6AXvo9Yfl7N\nQyH4IV0Ph97bKkGkaHSSlXAe1wKBgQDXND8rbPGVXRU50u1PSMEDVDVxTQpHVJSa\n7tPJ8MEiZIT8aXH6mMvGif2K1V6C33535AwvDkFmDtxpLGiah/Mowv7aV2U8FYgn\nnjs2+lsRlxlsdq2Ei2NLRlwDpSRnjfaFq1lRgXeHKQnyBfNWsUOcAl6vedji0rU6\nowZpYMmlfQKBgQCwuUurekS9Afpv2IAWUykQBKuHBfWSapD0CVG9tJTziggxmITs\nyzwLQAqf+n975XJh3ttRpeuG48PeVKJ+JFD79uhYmRAMXtigEZpjQN+doNHFpPi4\nH4FPxm1WffBkDrsOTyuAbOzVno/8KyORNxFabgx89T/NYKOv/x5jUNfPcQKBgQCq\nmtXVZFmk0pVIMQpGx2OUcwanGq8iW1Av/1PRDNbfoBa5UBK22rj5XV2t2XdCg1Fs\nVFLAXynDcdaUXktS7qH7V5LYn143Is68sbk53YGi0Umrbe4jXKlL/Kxni1zv52Bf\nGbcGYX/Tm9oxjzwZJxB1Nn+/1vX045wery0fD0bstQKBgQCC3zBVhbeF6pPLDPXT\nKyXYrQ1i77syaZq8HIlc2uHmgOa/3e8IW26QTUlvwblNQPXYjKM2kT/8xdTqJotj\nDlZWg1tEEhIlEe50/jwjUQSP9bFc/HZbzxscfuOZjI/uKzis5fjggPiXEsKPpHQ5\nzCZtTum2LoHYDWFJ91OOCLO5gQ==\n-----END PRIVATE KEY-----\n",
-            "client_email": "887456849346-compute@developer.gserviceaccount.com",
-            "client_id": "103873871759077567264",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/887456849346-compute%40developer.gserviceaccount.com",
-            "universe_domain": "googleapis.com"
-            }'
-          
-            
-            #'${{ secrets.GOOGLE_CREDENTIALS }}'
-          
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+             
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
       # Authenticate Docker to Google Cloud Artifact Registry
@@ -52,20 +37,7 @@ jobs:
         uses: 'docker/login-action@v1'
         with:
           username: _json_key
-          password: '{
-            "type": "service_account",
-            "project_id": "optical-mind-406809",
-            "private_key_id": "f8d5ec39e7e1135b39cdae7ada25831db6e417b8",
-            "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDJEA1Xc/LQCvlx\ndp0+C1xXa19ALwL3tM+lKfEJ+tqAOoGc7AP9oFcY9PRrVE8pyc3S20CmZlXU8kkD\n36a41qPBodFl0kxO4jd0eqIAsp61f37e5oZtbuzDv9nVtZDNp3sex5oI2sbF3WSE\n8RNLp49PaH9UsMvUF4kfSWCXzgKqdIeUTkuI0f6F/1yxzg93iGE9sprrw1qd/aRD\nUvNOiZr7u21aopn0ZFTwfZddxcqxOvXrV7ytn+4M1YPoAGlsgU12ftQ4kZT/gVkB\nFvgus86lnpFCT+kba7k8ytWPS87pbBGPYl2dYSPZ/VA1c8/t01aJn0dzcpUrwl3f\ndqwSbqH7AgMBAAECggEAXwXcGFGvFs2o+AvD4rfBy3ruSEovj9v/KqK4zSumKmX8\nLaqJdEtb/mp+PV9aDnjWcmm2ky3YMMzU3yTLCZ4/RFryuLl74Ogep0jx2XyRb1uz\nHSs7qup6sUSxccPejKMzl+djj/29ZXPtdrrskJu/KhtL2j24ByOcZZHrObNeJSoY\nzoWM2BjGjiac5ruxaSCbxDJ0+uzFk9lnFVQ5VtWEH4V456/8D346FQsBZ4Q6lvXx\n4dxSZpyDJ2HCqoZz4wKIvT/AxLLl3TrhSdW6IPqvP1Cmc2U15PfEREUV+bYpoVZw\n2FaQUpW0ZE4LNpygR0CtWDQBnyZbXj1EUnEn2RzPCQKBgQDvLYfUC+2Dm/lTzFFH\n9StzqNpLSh8sBx+APp/SBMA5AXUrxvBWXQHErzWAN6ekKl5aLOZ//ENl9wGTb7NL\nh3XJpx9r0AAyqUiG4mhnrXWGSGcPY1Z5Vwv3EyS8hH+RBLCZqZrVM6AXvo9Yfl7N\nQyH4IV0Ph97bKkGkaHSSlXAe1wKBgQDXND8rbPGVXRU50u1PSMEDVDVxTQpHVJSa\n7tPJ8MEiZIT8aXH6mMvGif2K1V6C33535AwvDkFmDtxpLGiah/Mowv7aV2U8FYgn\nnjs2+lsRlxlsdq2Ei2NLRlwDpSRnjfaFq1lRgXeHKQnyBfNWsUOcAl6vedji0rU6\nowZpYMmlfQKBgQCwuUurekS9Afpv2IAWUykQBKuHBfWSapD0CVG9tJTziggxmITs\nyzwLQAqf+n975XJh3ttRpeuG48PeVKJ+JFD79uhYmRAMXtigEZpjQN+doNHFpPi4\nH4FPxm1WffBkDrsOTyuAbOzVno/8KyORNxFabgx89T/NYKOv/x5jUNfPcQKBgQCq\nmtXVZFmk0pVIMQpGx2OUcwanGq8iW1Av/1PRDNbfoBa5UBK22rj5XV2t2XdCg1Fs\nVFLAXynDcdaUXktS7qH7V5LYn143Is68sbk53YGi0Umrbe4jXKlL/Kxni1zv52Bf\nGbcGYX/Tm9oxjzwZJxB1Nn+/1vX045wery0fD0bstQKBgQCC3zBVhbeF6pPLDPXT\nKyXYrQ1i77syaZq8HIlc2uHmgOa/3e8IW26QTUlvwblNQPXYjKM2kT/8xdTqJotj\nDlZWg1tEEhIlEe50/jwjUQSP9bFc/HZbzxscfuOZjI/uKzis5fjggPiXEsKPpHQ5\nzCZtTum2LoHYDWFJ91OOCLO5gQ==\n-----END PRIVATE KEY-----\n",
-            "client_email": "887456849346-compute@developer.gserviceaccount.com",
-            "client_id": "103873871759077567264",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/887456849346-compute%40developer.gserviceaccount.com",
-            "universe_domain": "googleapis.com"
-            }'
-            #'${{ secrets.GOOGLE_CREDENTIALS }}'
+          password: '${{ secrets.GOOGLE_CREDENTIALS }}'
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
       - name: Debug
