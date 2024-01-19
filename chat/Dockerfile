@@ -11,7 +11,7 @@ COPY src ./src
 RUN mvn clean install -DskipTests
 
 # expose the standard spring port
-EXPOSE 8081
+EXPOSE 8080
 
 WORKDIR /app/target
 
