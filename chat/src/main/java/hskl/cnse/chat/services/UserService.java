@@ -45,7 +45,8 @@ public class UserService {
     }
 
     public AuthUser findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        AuthUser authUser = userRepository.findByEmail(email);
+        return authUser;
     }
 
     public List<UserRegistrationDto> findAllUsers() {

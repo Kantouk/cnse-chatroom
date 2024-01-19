@@ -24,17 +24,17 @@ public class Message {
 
     private String content;
 
-    @JsonIgnore
+    
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;
 
-    @JsonBackReference
+    
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @JsonBackReference
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AuthUser user;

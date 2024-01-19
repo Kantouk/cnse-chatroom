@@ -3,18 +3,25 @@ package hskl.cnse.chat.controller;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.security.core.Authentication;
 import hskl.cnse.chat.db.dto.UserRegistrationDto;
 import hskl.cnse.chat.db.model.AuthUser;
+import hskl.cnse.chat.db.model.Message;
 import hskl.cnse.chat.services.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class UserController {
@@ -71,5 +78,41 @@ public class UserController {
         return "index";
     }
 
+
+    @GetMapping("/user/id")
+    public ResponseEntity<Long> getUserByName() {
+        // Zugriff auf die Authentication-Instanz
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Überprüfe, ob der Benutzer authentifiziert ist
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Hier kannst du auf verschiedene Informationen zugreifen, z.B.:
+            String username = authentication.getName();
+
+            AuthUser authUser = userService.findUserByEmail(username);
+            Long id = authUser.getId();
+
+            System.out.println(username + id);
+
+            return ResponseEntity.ok(id);
+    } else {
+        return ResponseEntity.status(0).build();
+    }
+    }
+
+    @GetMapping("/user/name")
+    public ResponseEntity<String> getUserName() {
+        // Zugriff auf die Authentication-Instanz
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Überprüfe, ob der Benutzer authentifiziert ist
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Hier kannst du auf verschiedene Informationen zugreifen, z.B.:
+            String username = authentication.getName();
+            return ResponseEntity.ok(username);
+    } else {
+        return ResponseEntity.status(0).build();
+    }
+    }
     
 }
