@@ -37,6 +37,10 @@ public class ChatService {
         logger.info("ChatService: createChat() hat folgende Parameter erhalten: " + chatCreationDto.toString());
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
+    
+        AuthUser user = userRepository.findById(chatCreationDto.getUserId()).orElse(null);
+        chatCreationDto.getParticipants().add(user);
+
         Chat chat = new Chat();
         chat.setName(chatCreationDto.getName());
         chat.setPassword(passwordEncoder.encode(chatCreationDto.getPassword()));

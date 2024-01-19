@@ -3,12 +3,15 @@ package hskl.cnse.chat.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import hskl.cnse.chat.db.dto.ChatCreationDto;
+import hskl.cnse.chat.db.dto.ChatDTO;
 import hskl.cnse.chat.db.model.Chat;
 import hskl.cnse.chat.services.ChatService;
+import hskl.cnse.chat.services.UserService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
@@ -25,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ChatController {
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Chat>> getChatsByUser(@PathVariable Long userId) {
@@ -33,23 +38,26 @@ public class ChatController {
     }
 
     @PostMapping
-    public ResponseEntity<Chat> createChat(@RequestBody ChatCreationDto chatCreationDto, BindingResult result) {
+    public ResponseEntity<ChatDTO> createChat(@RequestBody ChatCreationDto chatCreationDto, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         Chat createdChat = chatService.createChat(chatCreationDto);
-        return ResponseEntity.ok(createdChat);
+        ChatDTO rChatDto = new ChatDTO(createdChat);
+        userService.updateChatsForUser(chatCreationDto.getUserId());
+        return ResponseEntity.ok(rChatDto);
     }
 
     @PostMapping("/rename/{chatId}")
-    public ResponseEntity<Chat> renameChat(@RequestBody ChatCreationDto chatCreationDto, @PathVariable @NonNull Long chatId, BindingResult result) {
+    public ResponseEntity<ChatDTO> renameChat(@RequestBody ChatCreationDto chatCreationDto, @PathVariable @NonNull Long chatId, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         Chat renamedChat = chatService.renameChat(chatCreationDto, chatId);
-        return ResponseEntity.ok(renamedChat);
+        ChatDTO rChatDto = new ChatDTO(renamedChat);
+        return ResponseEntity.ok(rChatDto);
     }
 
     @PostMapping("/delete/{chatId}")
@@ -59,20 +67,23 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<Chat> getChatById(@PathVariable @NonNull Long chatId) {
+    public ResponseEntity<ChatDTO> getChatById(@PathVariable @NonNull Long chatId) {
         Chat chat = chatService.getChatById(chatId);
-        return ResponseEntity.ok(chat);
+        ChatDTO rChatDto = new ChatDTO(chat);
+        return ResponseEntity.ok(rChatDto);
     }
 
     @PostMapping("/addParticipant/{chatId}/{userId}")
     public ResponseEntity<Void> addParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
         chatService.addParticipant(chatId, userId);
+        userService.updateChatsForUser(userId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/removeParticipant/{chatId}/{userId}")
     public ResponseEntity<Void> removeParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
         chatService.removeParticipant(chatId, userId);
+        userService.updateChatsForUser(userId);
         return ResponseEntity.ok().build();
     }
 

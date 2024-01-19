@@ -1,6 +1,7 @@
 package hskl.cnse.chat.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,12 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import hskl.cnse.chat.db.dto.MessageCreationData;
+import hskl.cnse.chat.db.dto.MessageDTO;
 import hskl.cnse.chat.db.model.*;
 import hskl.cnse.chat.db.repositories.ChatRepository;
 import hskl.cnse.chat.db.repositories.MessageRepository;
 import hskl.cnse.chat.db.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class MessageService {
@@ -24,8 +27,12 @@ public class MessageService {
     private ChatRepository chatRepository;
     private final Logger logger = LoggerFactory.getLogger(MessageService.class);
 
-    public List<Message> getMessagesByChatId(Long chat_id) {
-        return messageRepository.findByChat_Id(chat_id);
+    public List<MessageDTO> getMessagesByChatId(@NonNull Long chatId) {
+        List<Message> messages = messageRepository.findByChat_Id(chatId);
+        return messages.stream()
+                .map(MessageDTO::new)
+                .peek(messageDTO -> logger.info("MessageService.getMessagesByChatId: MessageDTO: " + messageDTO.toString()))
+                .collect(Collectors.toList());
     }
 
     public Message sendMessage(MessageCreationData messageCreationData) {
@@ -51,7 +58,7 @@ public class MessageService {
     public Message editMessage(MessageCreationData messageCreationData, @NonNull Long message_id) {
         Message message = getMessageById(message_id);
         message.setContent(messageCreationData.getContent());
-        
+
         return messageRepository.save(message);
     }
 
@@ -60,7 +67,8 @@ public class MessageService {
     }
 
     public void deleteMessage(@NonNull Long message_id) {
-        messageRepository.deleteById(message_id);
+        Message message = getMessageById(message_id);
+        messageRepository.delete(message);
     }
 
     public void deleteChatHistoryForAllUsers(@NonNull Long chat_id) {

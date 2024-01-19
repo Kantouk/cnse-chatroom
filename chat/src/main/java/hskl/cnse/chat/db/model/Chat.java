@@ -2,8 +2,7 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
@@ -11,9 +10,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Chat {
@@ -24,11 +24,12 @@ public class Chat {
     @Nullable
     private String password;
 
-
-    @ManyToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("chat")
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
     private List<Message> messages;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("chats")
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "chat_user",
         joinColumns = {@JoinColumn(name = "CHAT_ID", referencedColumnName = "ID")},
