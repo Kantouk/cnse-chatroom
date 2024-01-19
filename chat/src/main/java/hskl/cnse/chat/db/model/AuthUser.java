@@ -62,8 +62,7 @@ public class AuthUser {
 
     @Override
     public String toString() {
-        return "AuthUser [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles="
-                + roles.toString() + ", messages=" + messages + ", chats=" + chats + "]";
+        return "AuthUser [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password;
     }
 
     
