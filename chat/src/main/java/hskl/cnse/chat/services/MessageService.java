@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hskl.cnse.chat.db.dto.MessageCreationData;
 import hskl.cnse.chat.db.dto.MessageDTO;
@@ -15,7 +16,6 @@ import hskl.cnse.chat.db.model.*;
 import hskl.cnse.chat.db.repositories.ChatRepository;
 import hskl.cnse.chat.db.repositories.MessageRepository;
 import hskl.cnse.chat.db.repositories.UserRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class MessageService {
@@ -66,11 +66,12 @@ public class MessageService {
         return messageRepository.findById(message_id).orElse(null);
     }
 
+    @Transactional
     public void deleteMessage(@NonNull Long message_id) {
-        Message message = getMessageById(message_id);
-        messageRepository.delete(message);
+        messageRepository.deleteById(message_id);
     }
 
+    @Transactional
     public void deleteChatHistoryForAllUsers(@NonNull Long chat_id) {
         // Nachrichtenverlauf für alle Nutzer löschen
         messageRepository.deleteByChat_Id(chat_id);

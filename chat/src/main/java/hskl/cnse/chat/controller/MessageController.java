@@ -17,7 +17,6 @@ import hskl.cnse.chat.db.dto.MessageCreationData;
 import hskl.cnse.chat.db.dto.MessageDTO;
 import hskl.cnse.chat.db.model.Message;
 import hskl.cnse.chat.services.MessageService;
-import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/messages")
@@ -26,7 +25,7 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/chat/{chat_id}")
-    public ResponseEntity<List<MessageDTO>> getMessagesByChat(@PathVariable Long chat_id) {
+    public ResponseEntity<List<MessageDTO>> getMessagesByChat(@PathVariable @NonNull Long chat_id) {
         List<MessageDTO> messageDTOs = messageService.getMessagesByChatId(chat_id);
         return ResponseEntity.ok(messageDTOs);
     }
@@ -53,14 +52,12 @@ public class MessageController {
         return ResponseEntity.ok(rMessageDto);
     }
 
-    @Transactional
     @PostMapping("/delete/{message_id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable @NonNull Long message_id) {
         messageService.deleteMessage(message_id);
         return ResponseEntity.ok().build();
     }
 
-    @Transactional
     @PostMapping("/deleteHistory/{chat_id}")
     public ResponseEntity<Void> deleteChatHistoryForAllUsers(@PathVariable @NonNull Long chat_id) {
         messageService.deleteChatHistoryForAllUsers(chat_id);
