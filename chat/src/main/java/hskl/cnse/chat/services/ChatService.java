@@ -67,8 +67,6 @@ public class ChatService {
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
         logger.info("Chat " + chat.getName() + " wurde erfolgreich umbenannt!");
-        logger.info("Chat " + chat.getName() + " hat folgende Teilnehmer: " + chat.getParticipants().toString());
-        logger.info("Chat " + chat.getName() + " hat folgendes Passwort: " + chat.getPassword());
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
