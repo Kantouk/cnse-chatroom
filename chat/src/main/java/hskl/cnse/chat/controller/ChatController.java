@@ -30,12 +30,6 @@ public class ChatController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Chat>> getChatsByUser(@PathVariable Long userId) {
-        List<Chat> chats = chatService.getChatsByUserId(userId);
-        return ResponseEntity.ok(chats);
-    }
-
     @PostMapping
     public ResponseEntity<ChatDTO> createChat(@RequestBody ChatCreationDto chatCreationDto, BindingResult result) {
         if (result.hasErrors()) {
@@ -86,6 +80,29 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/participants/{chatId}")
+    public ResponseEntity<List<Long>> getParticipants(@PathVariable @NonNull Long chatId) {
+        List<Long> participants = chatService.getParticipants(chatId);
+        return ResponseEntity.ok(participants);
+    }
+
+    @PostMapping("/checkPassword/{chatId}")
+    public ResponseEntity<Boolean> checkPassword(@PathVariable @NonNull Long chatId, @RequestBody @NonNull String password) {
+        boolean isCorrect = chatService.checkPassword(chatId, password);
+        return ResponseEntity.ok(isCorrect);
+    }
+
+    @PostMapping("/checkIfUserIsParticipant/{chatId}/{userId}")
+    public ResponseEntity<Boolean> checkIfUserIsParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
+        boolean isParticipant = chatService.checkIfUserIsParticipant(chatId, userId);
+        return ResponseEntity.ok(isParticipant);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ChatDTO>> getChatsByUserId(@PathVariable @NonNull Long userId) {
+        List<ChatDTO> chatDTOs = chatService.getChatsByUserId(userId);
+        return ResponseEntity.ok(chatDTOs);
+    }
     
 }
 

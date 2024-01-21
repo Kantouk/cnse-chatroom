@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hskl.cnse.chat.db.dto.ChatCreationDto;
+import hskl.cnse.chat.db.dto.ChatDTO;
 import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.db.model.Chat;
 import hskl.cnse.chat.db.repositories.ChatRepository;
@@ -24,11 +25,6 @@ public class ChatService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private final Logger logger = LoggerFactory.getLogger(ChatService.class);
-
-    public List<Chat> getChatsByUserId(Long userId) {
-        // Chats eines Nutzers abfragen
-        return chatRepository.findByUser_Id(userId);
-    }
 
     public Chat createChat(ChatCreationDto chatCreationDto) {
         logger.info("*********************************************************************************");
@@ -98,6 +94,29 @@ public class ChatService {
         AuthUser user = userRepository.findById(userId).orElse(null);
         chat.getParticipants().remove(user);
         chatRepository.save(chat);
+    }
+
+    public List<Long> getParticipants(@NonNull Long chatId) {
+        Chat chat = chatRepository.findById(chatId).orElse(null);
+        List<Long> participants = chat.getParticipants().stream().map(AuthUser::getId).toList();
+        return participants;
+    }
+
+    public boolean checkPassword(@NonNull Long chatId, @NonNull String password) {
+        Chat chat = chatRepository.findById(chatId).orElse(null);
+        return passwordEncoder.matches(password, chat.getPassword());
+    }
+
+    public boolean checkIfUserIsParticipant(@NonNull Long chatId, @NonNull Long userId) {
+        Chat chat = chatRepository.findById(chatId).orElse(null);
+        AuthUser user = userRepository.findById(userId).orElse(null);
+        return chat.getParticipants().contains(user);
+    }
+
+    public List<ChatDTO> getChatsByUserId(Long userId) {
+        List<Chat> chats = chatRepository.findByUser_Id(userId);
+        List<ChatDTO> chatDTOs = chats.stream().map(ChatDTO::new).toList();
+        return chatDTOs;
     }
 
 }
