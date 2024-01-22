@@ -63,6 +63,7 @@ function closeJoinRoomModal() {
 
 async function joinChat() {
     var chatId = document.getElementById('chatIdInput').value;
+    var password = document.getElementById('chatIdPassword').value;
 
     // Validierung der Eingaben (hier kannst du deine Validierung hinzufügen)
 
@@ -74,23 +75,24 @@ async function joinChat() {
 
     // Hier kannst du die Chatbeitritts-Logik einfügen
     // Rufe eine Funktion auf, die den Benutzer dem Chat hinzufügt und anschließend das Modal schließt
-    await joinChatFunction(chatId);
+    await joinChatFunction(chatId,password);
 
     // Schließe das Modal
     closeJoinRoomModal();
 }
 
 // Beispielhafte asynchrone Funktion für den Chatbeitritt (ersetze durch deine Logik)
-async function joinChatFunction(chatId) {
+async function joinChatFunction(chatId,password) {
     // Hier implementierst du die Logik zum Beitritt in einen Chat
     // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
-
+    userId = sessionStorage.getItem('user_id');
     // Beispiel:
-    const response = await fetch(`/join-chat/${chatId}`, {
+    const response = await fetch(`/chats/addParticipant/${chatId}/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body:JSON.stringify({password:password})
         // Weitere Optionen, falls benötigt
     });
 
@@ -100,36 +102,12 @@ async function joinChatFunction(chatId) {
         // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
     } else {
         console.log('Erfolgreich dem Chat beigetreten');
-        // Hier kannst du weitere Aktionen nach erfolgreichem Beitritt durchführen
+        loadUserChats();
     }
 }
 
 
-async function createChat() {
-    var chatName = document.getElementById('chatNameInput').value;
-    var password = document.getElementById('passwordInput').value;
 
-    // Validierung der Eingaben (hier kannst du deine Validierung hinzufügen)
-
-    // Beispielhaft: Prüfe, ob der Chatname nicht leer ist
-    if (chatName.trim() === '') {
-        alert('Chatname darf nicht leer sein');
-        return;
-    }
-
-    // Beispielhaft: Prüfe, ob das Passwort mindestens 6 Zeichen hat
-    if (password.length > 0 && password.length < 6) {
-        alert('Passwort muss mindestens 6 Zeichen lang sein');
-        return;
-    }
-
-    // Hier kannst du die Chat-Erstellungs-Logik einfügen
-    // Rufe eine Funktion auf, die den Chat erstellt und anschließend das Modal schließt
-    await createChatFunction(chatName, password);
-
-    // Schließe das Modal
-    closeCreateRoomModal();
-}
 
 // Beispielhafte asynchrone Funktion für die Chat-Erstellung (ersetze durch deine Logik)
 async function createChatFunction(chatName, password) {
@@ -194,7 +172,7 @@ async function createChatFunction(chatName, password) {
 
     function getCurrentUserId() {
         var userIdEndpointURL = '/user/id';
-
+        
         return fetch(userIdEndpointURL)
             .then(response => {
                 if (!response.ok) {
@@ -204,6 +182,7 @@ async function createChatFunction(chatName, password) {
             })
             .then(user_id => {
                 // Gib die BenutzerId zurück
+                sessionStorage.removeItem('user_id');
                 sessionStorage.setItem('user_id', user_id);
                 return user_id;
             })
@@ -219,10 +198,16 @@ async function createChatFunction(chatName, password) {
             openUserInfoModal();
         });
 
+        getCurrentUserId();
+        
+        // Rufe die Funktion zum Laden der Chaträume auf
+        loadUserChats();
+
         // Aktion bei Klick auf "Senden" Button
         document.querySelector('.send-btn').addEventListener('click', function () {
             // Hole den Text aus dem Eingabefeld
             getCurrentUserId();
+            
             // getCurrentUsername();
 
             var messageText = document.querySelector('.chat-input input').value;
@@ -232,7 +217,7 @@ async function createChatFunction(chatName, password) {
                 // Erstelle das Datenobjekt für die Nachricht
                 var messageData = {
                     content: messageText,
-                    chat_id: 1,
+                    chat_id: sessionStorage.getItem('selectedChatId'),
                     user_id: sessionStorage.getItem('user_id'),
                     // Weitere notwendige Daten, abhängig von deiner Anforderung
                 };
@@ -271,6 +256,7 @@ async function createChatFunction(chatName, password) {
             .then(sentMessage => {
                 // Verarbeite die Antwort des Servers, falls notwendig
                 console.log('Nachricht erfolgreich gesendet:', sentMessage);
+                loadAndShowMessages(sessionStorage.getItem('selectedChatId'));
             })
             .catch(error => {
                 console.error('Fehler:', error);
@@ -295,26 +281,6 @@ async function createChatFunction(chatName, password) {
             }
     }
 
-    // Funktion zum Anzeigen von Nachrichten im Chatfenster
-    function showMessages(messages) {
-        const chatMessagesContainer = document.querySelector('.chat-messages');
-
-        // Leere den Inhalt des Chatfensters
-        chatMessagesContainer.innerHTML = '';
-
-        // Durchlaufe die Nachrichten und füge sie dem Chatfenster hinzu
-        messages.forEach(message => {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message');
-            messageElement.textContent = `${message.sender}: ${message.content}`;
-
-            chatMessagesContainer.appendChild(messageElement);
-        });
-
-        // Scrolle zum unteren Ende des Chatfensters, um die neuesten Nachrichten anzuzeigen
-        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-    }
-
 
 
 
@@ -325,7 +291,7 @@ async function createChatFunction(chatName, password) {
     function openUserInfoModal() {
         var userInfoModal = document.getElementById('userInfoModal');
         userInfoModal.style.display = 'flex';
-        console.log(User-Settings);
+        console.log("User-Settings");
         // Hier kannst du die Benutzerinformationen laden und in das Modal einfügen
         // loadUserInfo();
     }
@@ -333,21 +299,6 @@ async function createChatFunction(chatName, password) {
     function closeUserInfoModal() {
         var userInfoModal = document.getElementById('userInfoModal');
         userInfoModal.style.display = 'none';
-    }
-
-    async function loadUserInfo() {
-        try {
-            // Hier kannst du die Benutzerinformationen vom Server abrufen
-            const userInfo = await fetchUserInfo();
-
-            // Beispielhaft: Setze die Benutzerinformationen in die Modal-Elemente
-            document.getElementById('firstNameSpan').innerText = userInfo.firstName;
-            document.getElementById('lastNameSpan').innerText = userInfo.lastName;
-            document.getElementById('emailSpan').innerText = userInfo.email;
-        } catch (error) {
-            console.error('Fehler beim Laden der Benutzerinformationen:', error);
-            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
-        }
     }
 
     async function loadUserInfo() {
@@ -384,4 +335,188 @@ async function createChatFunction(chatName, password) {
 
         const userInfo = await response.json();
         return userInfo;
+    }
+
+    //############################ Chat-Handling ########################################################################################################
+ 
+
+    // Aktion bei erfolgreichem Chat-Erstellen
+    async function addChat() {
+        var chatName = document.getElementById('chatNameInput').value;
+        var password = document.getElementById('passwordInput').value;
+
+        // Beispielhaft: Prüfe, ob der Chatname nicht leer ist
+        if (chatName.trim() === '') {
+            alert('Chatname darf nicht leer sein');
+            return;
+        }
+
+        // Hier kannst du die Chat-Erstellungs-Logik einfügen
+        // Rufe eine Funktion auf, die den Chat erstellt und anschließend das Modal schließt
+        var createdChat = await createChatFunction(chatName, password);
+
+        // Aktualisiere die Chatliste
+        loadUserChats();
+
+        // Schließe das Modal
+        closeCreateRoomModal();
+    }
+
+    // Globale Variable für die Liste der Chats
+    window.userChats = [];
+
+    // Funktion zum Aktualisieren der Anzeige der Chaträume
+    function updateChatRooms(userChats) {
+        const userRoomsContainer = document.querySelector('.user-rooms');
+
+        // Leere den Inhalt des Containers
+        userRoomsContainer.innerHTML = '';
+
+        var chatName = document.getElementById('chat-header-text');
+
+        // Durchlaufe die Chaträume und füge sie dem Container hinzu
+        userChats.forEach(chat => {
+            const chatRoomElement = document.createElement('div');
+            chatRoomElement.classList.add('chatroom-box');
+            chatRoomElement.textContent = chat.name; // Hier kannst du auch die ID hinzufügen oder andere Informationen
+            chatRoomElement.setAttribute('chatId', chat.id);
+
+            // Füge einen Event-Listener für den Klick auf den Chatraum hinzu
+            chatRoomElement.addEventListener('click', function () {
+                // Hier kannst du weitere Aktionen für den Klick auf den Chatraum durchführen
+                // Zum Beispiel den ausgewählten Chatraum setzen und die Nachrichten laden
+                chatName.textContent = chat.name + " Chat-Id: " + chat.id + " Wird fürs Beitreten verwendet";
+                sessionStorage.removeItem('selectedChatId');
+                sessionStorage.setItem('selectedChatId', chat.id);
+                loadAndShowMessages(chat.id);
+            });
+
+            userRoomsContainer.appendChild(chatRoomElement);
+        });
+
+        // Füge den Button zum Hinzufügen eines neuen Chatraums hinzu
+        const addRoomBtn = document.createElement('div');
+        addRoomBtn.classList.add('add-room-btn');
+        addRoomBtn.textContent = '+';
+        addRoomBtn.addEventListener('click', function () {
+            openRoomModal();
+        });
+        userRoomsContainer.appendChild(addRoomBtn);
+    }
+
+    // Beispielhafte asynchrone Funktion für die Chat-Erstellung (ersetze durch deine Logik)
+    async function createChatFunction(chatName, password) {
+        // ... (wie bisherige Logik)
+        // Beispiel:
+        const response = await fetch('/chats', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: chatName,
+                password: password,
+                userId: sessionStorage.getItem('user_id')
+            }),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            console.error('Fehler bei der Chat-Erstellung:', errorMessage);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        } else {
+            const createdChat = await response.json();
+            console.log('Chat erfolgreich erstellt:', createdChat);
+            reloadPage();
+            return createdChat;
+        }
+    }
+
+    // Funktion zum Laden der Chaträume des Benutzers
+    async function loadUserChats() {
+        try {
+            await getCurrentUserId();
+            // Rufe die Chaträume des Benutzers vom Server ab
+            const userChats = await fetchUserChats();
+
+            // Aktualisiere die Anzeige der Chaträume
+            updateChatRooms(userChats);
+        } catch (error) {
+            console.error('Fehler beim Laden der Chaträume:', error);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        }
+    }
+
+    // Funktion zum Abrufen der Chaträume des Benutzers
+    async function fetchUserChats() {
+        userId = sessionStorage.getItem('user_id');
+
+        try {
+            const response = await fetch(`/chats/user/${userId}`);
+            if (!response.ok) {
+                throw new Error('Fehler beim Abrufen der Chaträume');
+            }
+
+            const userChats = await response.json();
+            return userChats;
+        } catch (error) {
+            console.error('Fehler beim Abrufen der Chaträume:', error);
+            console.log(userChats)
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+            return [];
+        }
+    }
+
+    // Funktion zum Neu laden der Seite
+    function reloadPage() {
+        location.reload();
+    }
+
+
+    // Neue Funktion zum Laden und Anzeigen von Nachrichten
+    async function loadAndShowMessages(chatId) {
+        try {
+            // Lade die Nachrichten für den Chatraum
+            const messages = await getAllMessagesByChatId(chatId);
+
+            // Zeige die Nachrichten im Chatfenster an
+            showMessages(messages);
+        } catch (error) {
+            console.error('Fehler beim Laden der Nachrichten:', error);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        }
+    }
+
+    // Funktion zum Anzeigen von Nachrichten im Chatfenster
+    function showMessages(messages) {
+        const chatMessagesContainer = document.querySelector('.chat-messages');
+
+        // Leere den Inhalt des Chatfensters
+        chatMessagesContainer.innerHTML = '';
+
+        getCurrentUserId();
+
+        // Durchlaufe die Nachrichten und füge sie dem Chatfenster hinzu
+        messages.forEach(message => {
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+            const formattedDate = "" + message.timestamp[2]+"."+message.timestamp[1]+"."+message.timestamp[0]+ " : " +message.timestamp[3]+"."+message.timestamp[4];
+
+            // Beispiel: Anzeige des Nachrichteninhalts und Senders
+            if (message.userId == sessionStorage.getItem('user_id')) {
+                // Nachrichten des aktuellen Benutzers anzeigen
+                messageElement.classList.add('current-user');
+                messageElement.innerHTML = `<span class="message-sender">Du</span><br>${message.content}<br><span class="message-date">${formattedDate}</span>`;
+            } else {
+                // Nachrichten von anderen Benutzern anzeigen
+                messageElement.innerHTML = `<span class="message-sender">${message.userId}</span><br>${message.content}<br><span class="message-date">${formattedDate}</span>`;
+            }
+
+            chatMessagesContainer.appendChild(messageElement);
+        });
+                
+
+        // Scrolle zum unteren Ende des Chatfensters, um die neuesten Nachrichten anzuzeigen
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
     }

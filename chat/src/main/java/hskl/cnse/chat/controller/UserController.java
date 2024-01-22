@@ -78,7 +78,6 @@ public class UserController {
         return "index";
     }
 
-
     @GetMapping("/user/id")
     public ResponseEntity<Long> getUserByName() {
         // Zugriff auf die Authentication-Instanz

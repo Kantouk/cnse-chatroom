@@ -33,7 +33,7 @@
         <div class="chat-container">
             <div class="chat-header">
                 <!-- Aktuell ausgewählter Chatraum -->
-                <h2>Chatraum 1</h2>
+                <h2 id="chat-header-text">Chatraum 1</h2>
             </div>
             <div class="chat-messages">
                 <!-- Chatnachrichten werden hier angezeigt -->
@@ -55,7 +55,7 @@
     </div>
 
     <!-- Ergänztes HTML-Code für das Chatraumerstellungs-Modal -->
-    <div id="createRoomModal" class="modal" onclick="closeCreateRoomModal()">
+    <div id="createRoomModal" class="modal">
         <div id="modalContent" class="modal-content">
             <h2>Chatraum erstellen</h2>
             <input type="text" id="chatNameInput" placeholder="Chatname">
@@ -65,16 +65,17 @@
     </div>
 
     <!-- Ergänztes HTML-Code für das Chatbeitritts-Modal -->
-    <div id="joinRoomModal" class="modal" onclick="closeJoinRoomModal()">
+    <div id="joinRoomModal" class="modal">
         <div id="modalContent" class="modal-content">
             <h2>Raum beitreten</h2>
             <input type="text" id="chatIdInput" placeholder="Chat-ID">
+            <input type="password" id="chatIdPassword" placeholder="Chat-Passwort">
             <button id="joinChatBtn" onclick="joinChat()">Beitreten</button>
         </div>
     </div>
 
     <!-- Ergänztes HTML-Code für das Benutzerinfo-Modal -->
-    <div id="userInfoModal" class="modal" onclick="closeUserInfoModal()">
+    <div id="userInfoModal" class="modal">
         <div id="modalContent" class="modal-content">
             <h2>Benutzerinformationen</h2>
             <p><strong>Vorname:</strong> <span id="firstNameSpan"></span></p>
