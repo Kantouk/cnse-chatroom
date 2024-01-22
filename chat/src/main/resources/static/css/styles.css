@@ -63,6 +63,17 @@ body {
 }
 
 
+.user-settings-btn{
+    max-height: 10%; /* Maximale Höhe für den Button auf 80% beschränken */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 10px; /* Padding aussenrum */
+    margin-top: 10px; /* Abstand nach oben */
+    text-align: center; /* Zentrierte Schrift */
+}
+
 .logout-btn {
     background-color: red;
     color: white; /* Damit der Text besser sichtbar ist, weiß setzen */

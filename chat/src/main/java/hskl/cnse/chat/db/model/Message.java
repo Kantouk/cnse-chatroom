@@ -24,7 +24,7 @@ public class Message {
 
     private String content;
 
-    @JsonIgnore
+    
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime timestamp;

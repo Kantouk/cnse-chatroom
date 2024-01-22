@@ -1,6 +1,6 @@
 // JavaScript
 
-// Funktion zum Anmelden
+// Funktion zum Abmelden
 function logout() {
     // Extrahiere den Ursprung (Origin) der aktuellen Anwendung
     const currentOrigin = window.location.origin;
@@ -16,42 +16,372 @@ function logout() {
 }
 
 // Funktion zum Öffnen des Modals
-function openCreateRoomModal() {
+function openRoomModal() {
     var modal = document.getElementById('roomModal');
     modal.style.display = 'flex'; // Zeige das Modal an
 }
 
 // Funktion zum Schließen des Modals
-function closeCreateRoomModal() {
+function closeRoomModal() {
     var modal = document.getElementById('roomModal');
     modal.style.display = 'none'; // Verstecke das Modal
 }
 
 // Aktion bei Klick auf "Einen neuen Raum erstellen" Button
 document.getElementById('createRoomBtn').addEventListener('click', function () {
-    alert('Neuen Raum erstellen'); // Hier kannst du die gewünschte Aktion ausführen
-    closeCreateRoomModal();
+    closeRoomModal();
+    openCreateRoomModal();
 });
+
+// Ergänzte JavaScript-Funktionen für das Chatraumerstellungs-Modal
+function openCreateRoomModal() {
+    var createRoomModal = document.getElementById('createRoomModal');
+    createRoomModal.style.display = 'flex';
+}
+
+function closeCreateRoomModal() {
+    var createRoomModal = document.getElementById('createRoomModal');
+    createRoomModal.style.display = 'none';
+}
 
 // Aktion bei Klick auf "Einem Raum beitreten" Button
 document.getElementById('joinRoomBtn').addEventListener('click', function () {
-    alert('Einem Raum beitreten'); // Hier kannst du die gewünschte Aktion ausführen
     closeCreateRoomModal();
+    openJoinRoomModal();
 });
 
-// Schließe das Modal, wenn der Benutzer außerhalb des Modals klickt
-window.addEventListener('click', function (event) {
-    var modal = document.getElementById('roomModal');
-    var modalContent = document.getElementById('modalContent');
-
-    if (event.target === modal) {
-        closeCreateRoomModal();
-    }
-});
-
-// Funktion zum Öffnen der Benutzereinstellungen
-function openUserSettings() {
-    // Hier füge den Code hinzu, um zu den Benutzereinstellungen zu navigieren oder anzuzeigen
-    // Beispiel: window.location.href = 'benutzereinstellungen.html';
-    // Ersetze 'benutzereinstellungen.html' durch den tatsächlichen Pfad zu deinen Benutzereinstellungen.
+// Ergänzte JavaScript-Funktionen für das Chatbeitritts-Modal
+function openJoinRoomModal() {
+    var joinRoomModal = document.getElementById('joinRoomModal');
+    joinRoomModal.style.display = 'flex';
 }
+
+function closeJoinRoomModal() {
+    var joinRoomModal = document.getElementById('joinRoomModal');
+    joinRoomModal.style.display = 'none';
+}
+
+async function joinChat() {
+    var chatId = document.getElementById('chatIdInput').value;
+
+    // Validierung der Eingaben (hier kannst du deine Validierung hinzufügen)
+
+    // Beispielhaft: Prüfe, ob die Chat-ID nicht leer ist
+    if (chatId.trim() === '') {
+        alert('Chat-ID darf nicht leer sein');
+        return;
+    }
+
+    // Hier kannst du die Chatbeitritts-Logik einfügen
+    // Rufe eine Funktion auf, die den Benutzer dem Chat hinzufügt und anschließend das Modal schließt
+    await joinChatFunction(chatId);
+
+    // Schließe das Modal
+    closeJoinRoomModal();
+}
+
+// Beispielhafte asynchrone Funktion für den Chatbeitritt (ersetze durch deine Logik)
+async function joinChatFunction(chatId) {
+    // Hier implementierst du die Logik zum Beitritt in einen Chat
+    // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
+
+    // Beispiel:
+    const response = await fetch(`/join-chat/${chatId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        // Weitere Optionen, falls benötigt
+    });
+
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error('Fehler beim Beitritt in den Chat:', errorMessage);
+        // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+    } else {
+        console.log('Erfolgreich dem Chat beigetreten');
+        // Hier kannst du weitere Aktionen nach erfolgreichem Beitritt durchführen
+    }
+}
+
+
+async function createChat() {
+    var chatName = document.getElementById('chatNameInput').value;
+    var password = document.getElementById('passwordInput').value;
+
+    // Validierung der Eingaben (hier kannst du deine Validierung hinzufügen)
+
+    // Beispielhaft: Prüfe, ob der Chatname nicht leer ist
+    if (chatName.trim() === '') {
+        alert('Chatname darf nicht leer sein');
+        return;
+    }
+
+    // Beispielhaft: Prüfe, ob das Passwort mindestens 6 Zeichen hat
+    if (password.length > 0 && password.length < 6) {
+        alert('Passwort muss mindestens 6 Zeichen lang sein');
+        return;
+    }
+
+    // Hier kannst du die Chat-Erstellungs-Logik einfügen
+    // Rufe eine Funktion auf, die den Chat erstellt und anschließend das Modal schließt
+    await createChatFunction(chatName, password);
+
+    // Schließe das Modal
+    closeCreateRoomModal();
+}
+
+// Beispielhafte asynchrone Funktion für die Chat-Erstellung (ersetze durch deine Logik)
+async function createChatFunction(chatName, password) {
+    // Hier implementierst du die Logik zur Chat-Erstellung
+    // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
+
+    // Beispiel:
+    const response = await fetch('/create-chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: chatName,
+            password: password,
+            // Weitere Daten, die du benötigst
+        }),
+    });
+
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error('Fehler bei der Chat-Erstellung:', errorMessage);
+        // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+    } else {
+        console.log('Chat erfolgreich erstellt');
+        // Hier kannst du weitere Aktionen nach erfolgreicher Erstellung durchführen
+    }
+}
+
+    // Schließe das Modal, wenn der Benutzer außerhalb des Modals klickt
+    window.addEventListener('click', function (event) {
+        var modal = document.getElementById('roomModal');
+        var modalContent = document.getElementById('modalContent');
+
+        if (event.target === modal) {
+            closeCreateRoomModal();
+        }
+    });
+
+
+    // Funktion zum Abrufen des Benutzernamens über GET-Anfrage
+    function getCurrentUsername() {
+        var usernameEndpointURL = '/user/name';
+
+        return fetch(usernameEndpointURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen des Benutzernamens');
+                }
+                return response.json();
+            })
+            .then(username => {
+                // Gib den Benutzernamen zurück
+                
+                sessionStorage.setItem('username',username);
+                return username;
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
+            });
+    }
+
+    function getCurrentUserId() {
+        var userIdEndpointURL = '/user/id';
+
+        return fetch(userIdEndpointURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen der BenutzerId');
+                }
+                return response.json();
+            })
+            .then(user_id => {
+                // Gib die BenutzerId zurück
+                sessionStorage.setItem('user_id', user_id);
+                return user_id;
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+            // Füge einen Event-Listener für das Benutzericon hinzu
+        document.getElementById('userIcon').addEventListener('click', function() {
+            openUserInfoModal();
+        });
+
+        // Aktion bei Klick auf "Senden" Button
+        document.querySelector('.send-btn').addEventListener('click', function () {
+            // Hole den Text aus dem Eingabefeld
+            getCurrentUserId();
+            // getCurrentUsername();
+
+            var messageText = document.querySelector('.chat-input input').value;
+
+            // Überprüfe, ob die Nachricht nicht leer ist
+            if (messageText.trim() !== '') {
+                // Erstelle das Datenobjekt für die Nachricht
+                var messageData = {
+                    content: messageText,
+                    chat_id: 1,
+                    user_id: sessionStorage.getItem('user_id'),
+                    // Weitere notwendige Daten, abhängig von deiner Anforderung
+                };
+
+                console.log(sessionStorage.getItem('user_id'));
+
+                // Sende die Nachricht an den MessageController
+                sendMessageToController(messageData);
+
+                // Leere das Eingabefeld
+                document.querySelector('.chat-input input').value = '';
+            }
+        });
+    })
+
+
+    // Funktion zum Senden der Nachricht an den MessageController
+    function sendMessageToController(messageData) {
+        // Definiere die URL der sendMessage-Methode im MessageController
+        var sendMessageURL = '/messages';
+
+        // Sende die Nachricht mit AJAX (oder einer anderen Methode deiner Wahl)
+        fetch(sendMessageURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(messageData),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Fehler beim Senden der Nachricht');
+                }
+                return response.json();
+            })
+            .then(sentMessage => {
+                // Verarbeite die Antwort des Servers, falls notwendig
+                console.log('Nachricht erfolgreich gesendet:', sentMessage);
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
+            });
+    }
+
+    async function getAllMessagesByChatId(chat_id) {
+            try {
+                const response = await fetch(`/messages/chat/${chat_id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Fehler beim Abrufen der Nachrichten');
+                }
+        
+                const messages = await response.json();
+                return messages;
+            } catch (error) {
+                console.error('Fehler:', error);
+                // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+                // z.B. Fehler an die Aufruferfunktion weitergeben oder leeres Array zurückgeben
+                return [];
+            }
+    }
+
+    // Funktion zum Anzeigen von Nachrichten im Chatfenster
+    function showMessages(messages) {
+        const chatMessagesContainer = document.querySelector('.chat-messages');
+
+        // Leere den Inhalt des Chatfensters
+        chatMessagesContainer.innerHTML = '';
+
+        // Durchlaufe die Nachrichten und füge sie dem Chatfenster hinzu
+        messages.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+            messageElement.textContent = `${message.sender}: ${message.content}`;
+
+            chatMessagesContainer.appendChild(messageElement);
+        });
+
+        // Scrolle zum unteren Ende des Chatfensters, um die neuesten Nachrichten anzuzeigen
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    }
+
+
+
+
+//############################################ UserInfo
+
+
+    // Ergänzte JavaScript-Funktionen für das Benutzerinfo-Modal
+    function openUserInfoModal() {
+        var userInfoModal = document.getElementById('userInfoModal');
+        userInfoModal.style.display = 'flex';
+        console.log(User-Settings);
+        // Hier kannst du die Benutzerinformationen laden und in das Modal einfügen
+        // loadUserInfo();
+    }
+
+    function closeUserInfoModal() {
+        var userInfoModal = document.getElementById('userInfoModal');
+        userInfoModal.style.display = 'none';
+    }
+
+    async function loadUserInfo() {
+        try {
+            // Hier kannst du die Benutzerinformationen vom Server abrufen
+            const userInfo = await fetchUserInfo();
+
+            // Beispielhaft: Setze die Benutzerinformationen in die Modal-Elemente
+            document.getElementById('firstNameSpan').innerText = userInfo.firstName;
+            document.getElementById('lastNameSpan').innerText = userInfo.lastName;
+            document.getElementById('emailSpan').innerText = userInfo.email;
+        } catch (error) {
+            console.error('Fehler beim Laden der Benutzerinformationen:', error);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        }
+    }
+
+    async function loadUserInfo() {
+        try {
+            // Hier kannst du die Benutzerinformationen vom Server abrufen
+            const userInfo = await fetchUserInfo();
+
+            // Beispielhaft: Setze die Benutzerinformationen in die Modal-Elemente
+            document.getElementById('firstNameSpan').innerText = userInfo.firstName;
+            document.getElementById('lastNameSpan').innerText = userInfo.lastName;
+            document.getElementById('emailSpan').innerText = userInfo.email;
+        } catch (error) {
+            console.error('Fehler beim Laden der Benutzerinformationen:', error);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        }
+    }
+
+    // Beispielhafte asynchrone Funktion zum Abrufen der Benutzerinformationen (ersetze durch deine Logik)
+    async function fetchUserInfo() {
+        // Hier implementierst du die Logik zum Abrufen der Benutzerinformationen
+        // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
+
+        // Beispiel:
+        const response = await fetch('/user-info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // Weitere Optionen, falls benötigt
+        });
+        if (!response.ok) {
+            throw new Error('Fehler beim Abrufen der Benutzerinformationen');
+        }
+
+        const userInfo = await response.json();
+        return userInfo;
+    }
