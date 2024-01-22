@@ -9,6 +9,7 @@ import hskl.cnse.chat.services.ChatService;
 import hskl.cnse.chat.services.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,6 @@ public class ChatController {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-
         Chat createdChat = chatService.createChat(chatCreationDto);
         ChatDTO rChatDto = new ChatDTO(createdChat);
         userService.updateChatsForUser(chatCreationDto.getUserId());
@@ -43,18 +43,22 @@ public class ChatController {
     }
 
     @PostMapping("/rename/{chatId}")
-    public ResponseEntity<ChatDTO> renameChat(@RequestBody ChatCreationDto chatCreationDto, @PathVariable @NonNull Long chatId, BindingResult result) {
-        if (result.hasErrors()) {
+    public ResponseEntity<ChatDTO> renameChat(@RequestBody ChatCreationDto chatCreationDto, @PathVariable @NonNull Long chatId, @RequestBody Map<String, String> body, BindingResult result) {
+        String password = body.get("password");
+        if (result.hasErrors() || !chatService.checkPassword(chatId, password)) {
             return ResponseEntity.badRequest().build();
         }
-
         Chat renamedChat = chatService.renameChat(chatCreationDto, chatId);
         ChatDTO rChatDto = new ChatDTO(renamedChat);
         return ResponseEntity.ok(rChatDto);
     }
 
     @PostMapping("/delete/{chatId}")
-    public ResponseEntity<Void> deleteChat(@PathVariable @NonNull Long chatId) {
+    public ResponseEntity<Void> deleteChat(@PathVariable @NonNull Long chatId, @RequestBody Map<String, String> body, BindingResult result) {
+        String password = body.get("password");
+        if (result.hasErrors() || !chatService.checkPassword(chatId, password)) {
+            return ResponseEntity.badRequest().build();
+        }
         chatService.deleteChat(chatId);
         return ResponseEntity.ok().build();
     }
@@ -67,14 +71,22 @@ public class ChatController {
     }
 
     @PostMapping("/addParticipant/{chatId}/{userId}")
-    public ResponseEntity<Void> addParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
+    public ResponseEntity<Void> addParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId, @RequestBody Map<String, String> body, BindingResult result) {
+        String password = body.get("password");
+        if (result.hasErrors() || !chatService.checkPassword(chatId, password)) {
+            return ResponseEntity.badRequest().build();
+        }
         chatService.addParticipant(chatId, userId);
         userService.updateChatsForUser(userId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/removeParticipant/{chatId}/{userId}")
-    public ResponseEntity<Void> removeParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId) {
+    public ResponseEntity<Void> removeParticipant(@PathVariable @NonNull Long chatId, @PathVariable @NonNull Long userId, @RequestBody Map<String, String> body, BindingResult result) {
+        String password = body.get("password");
+        if (result.hasErrors() || !chatService.checkPassword(chatId, password)) {
+            return ResponseEntity.badRequest().build();
+        }
         chatService.removeParticipant(chatId, userId);
         userService.updateChatsForUser(userId);
         return ResponseEntity.ok().build();

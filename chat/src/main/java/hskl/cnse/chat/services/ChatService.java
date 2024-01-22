@@ -33,7 +33,7 @@ public class ChatService {
         logger.info("ChatService: createChat() hat folgende Parameter erhalten: " + chatCreationDto.toString());
         logger.info("*********************************************************************************");
         logger.info("*********************************************************************************");
-    
+
         AuthUser user = userRepository.findById(chatCreationDto.getUserId()).orElse(null);
         chatCreationDto.getParticipants().add(user);
 
@@ -71,29 +71,33 @@ public class ChatService {
     }
 
     public void deleteChat(@NonNull Long chatId) {
-        // Chat löschen
         chatRepository.deleteById(chatId);
     }
 
     public Chat getChatById(@NonNull Long chatId) {
-        // Chat abfragen
         return chatRepository.findById(chatId).orElse(null);
     }
 
     public void addParticipant(@NonNull Long chatId, @NonNull Long userId) {
-        // Teilnehmer hinzufügen
-        Chat chat = chatRepository.findById(chatId).orElse(null);
-        AuthUser user = userRepository.findById(userId).orElse(null);
-        chat.getParticipants().add(user);
-        chatRepository.save(chat);
+        if (checkIfUserIsParticipant(chatId, userId)) {
+            logger.info("User ist bereits Teilnehmer!");
+        } else {
+            Chat chat = chatRepository.findById(chatId).orElse(null);
+            AuthUser user = userRepository.findById(userId).orElse(null);
+            chat.getParticipants().add(user);
+            chatRepository.save(chat);
+        }
     }
 
     public void removeParticipant(@NonNull Long chatId, @NonNull Long userId) {
-        // Teilnehmer entfernen
-        Chat chat = chatRepository.findById(chatId).orElse(null);
-        AuthUser user = userRepository.findById(userId).orElse(null);
-        chat.getParticipants().remove(user);
-        chatRepository.save(chat);
+        if (!checkIfUserIsParticipant(chatId, userId)) {
+            logger.info("User ist kein Teilnehmer!");
+        } else {
+            Chat chat = chatRepository.findById(chatId).orElse(null);
+            AuthUser user = userRepository.findById(userId).orElse(null);
+            chat.getParticipants().remove(user);
+            chatRepository.save(chat);
+        }
     }
 
     public List<Long> getParticipants(@NonNull Long chatId) {
@@ -120,4 +124,3 @@ public class ChatService {
     }
 
 }
-
