@@ -64,10 +64,10 @@ public class UserController {
             System.out.println("Roles for user " + savedUser.getEmail() + ": " + savedUser.getRoles());
             System.out.println("#################################################################################");
 
-            return "redirect:/register?success";
+            return "redirect:/?success";
         }
 
-        return "redirect:/index";
+        return "redirect:/register?error";
     }
 
     // handler method to handle list of users

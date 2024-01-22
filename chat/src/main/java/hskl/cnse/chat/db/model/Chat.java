@@ -2,14 +2,16 @@ package hskl.cnse.chat.db.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
@@ -22,12 +24,16 @@ public class Chat {
     @Nullable
     private String password;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "chat")
+    @JsonIgnoreProperties("chat")
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
     private List<Message> messages;
 
-    @JsonBackReference
-    @ManyToMany
+    @JsonIgnoreProperties("chats")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "chat_user",
+        joinColumns = {@JoinColumn(name = "CHAT_ID", referencedColumnName = "ID")},
+        inverseJoinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
     private List<AuthUser> participants;
 
     public Chat() {
@@ -97,8 +103,7 @@ public class Chat {
 
     @Override
     public String toString() {
-        return "Chat [id=" + id + ", name=" + name + ", password=" + password + ", messages=" + messages
-                + ", participants=" + participants + "]";
+        return "Chat [id=" + id + ", name=" + name + ", password=" + password + "]";
     }
 
 

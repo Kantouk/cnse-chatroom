@@ -1,6 +1,7 @@
 package hskl.cnse.chat.services;
 
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private ChatRepository chatRepository;
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, ChatRepository chatRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.chatRepository = chatRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -62,5 +65,12 @@ public class UserService {
         userDto.setLastName(name[1]);
         userDto.setEmail(user.getEmail());
         return userDto;
+    }
+
+    public void updateChatsForUser(@NonNull Long userId) {
+        AuthUser user = userRepository.findById(userId).orElse(null);
+        List<Chat> chats = chatRepository.findByUser_Id(userId);
+        user.getChats().addAll(chats);
+        userRepository.save(user);
     }
 }
