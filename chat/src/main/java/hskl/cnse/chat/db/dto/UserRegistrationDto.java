@@ -1,5 +1,8 @@
 package hskl.cnse.chat.db.dto;
 
+import java.util.List;
+
+import hskl.cnse.chat.db.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -23,4 +26,11 @@ public class UserRegistrationDto {
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
+    @NotEmpty(message = "Roles should not be empty")
+    private List<Role> roles;
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
 }

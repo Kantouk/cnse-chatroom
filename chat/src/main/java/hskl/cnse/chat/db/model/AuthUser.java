@@ -32,6 +32,8 @@ public class AuthUser {
 
     private static final long serialVersionUID = 1L;
 
+    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,6 +68,9 @@ public class AuthUser {
                 + roles.toString() + ", messages=" + messages + ", chats=" + chats + "]";
     }
 
+    
+
+    
     
     
 }

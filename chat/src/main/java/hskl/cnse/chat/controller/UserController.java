@@ -1,6 +1,6 @@
 package hskl.cnse.chat.controller;
 
-import jakarta.validation.Valid;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import hskl.cnse.chat.db.dto.UserRegistrationDto;
 import hskl.cnse.chat.db.model.AuthUser;
-import hskl.cnse.chat.services.*;
-
-import java.util.List;
+import hskl.cnse.chat.services.UserService;
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -33,8 +32,8 @@ public class UserController {
     // handler method to handle user registration form submit request
     @PostMapping("/register")
     public String registration(@Valid @ModelAttribute("user") UserRegistrationDto userDto,
-                               BindingResult result,
-                               Model model) {
+            BindingResult result,
+            Model model) {
         AuthUser existingUser = userService.findUserByEmail(userDto.getEmail());
 
         if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
@@ -42,7 +41,6 @@ public class UserController {
                     "There is already an account registered with the same email");
         }
 
-        
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             System.out.println("#################################################################################");
@@ -52,7 +50,6 @@ public class UserController {
             userService.saveUser(userDto);
             AuthUser savedUser = userService.findUserByEmail(userDto.getEmail());
 
-            
             System.out.println("#################################################################################");
             System.out.println("Roles for user " + savedUser.getEmail() + ": " + savedUser.getRoles());
             System.out.println("#################################################################################");
@@ -70,6 +67,13 @@ public class UserController {
         model.addAttribute("users", users);
         return "index";
     }
-
-    
+/* 
+    @GetMapping("/currentuser")
+    public void currentUser(OAuth2AuthenticationToken authentication) {
+        Logger logger = LoggerFactory.getLogger(authentication.getClass());
+        String email = (String) authentication.getPrincipal().getAttributes().get("email");
+        logger.info("Current user attributes: {}", attributes);
+        
+    }
+*/
 }

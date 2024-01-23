@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Current User</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Current User</h1>
+    <pre id="userData"></pre>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var currentUserEndpoint = /*[[@{/currentuser}]]*/ 'currentuser';
+        axios.get(currentUserEndpoint)
+            .then(function (response) {
+                document.getElementById('userData').textContent = JSON.stringify(response.data, null, 2);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        /*]]>*/
+    </script>
+</body>
+</html>

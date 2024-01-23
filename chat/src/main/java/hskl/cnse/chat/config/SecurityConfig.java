@@ -31,7 +31,7 @@ public class SecurityConfig {
                                                         authorizeHttp.requestMatchers("/error").permitAll();
                                                         authorizeHttp.requestMatchers("/register").permitAll();
                                                         authorizeHttp.requestMatchers("/login").permitAll();
-                                                        authorizeHttp.requestMatchers("/chat").hasAnyAuthority("ADMIN","OIDC_USER");
+                                                        authorizeHttp.requestMatchers("/chat").hasAnyAuthority("ADMIN","OIDC_USER","USER");
                                                         authorizeHttp.requestMatchers("static/css/**").permitAll();
                                                         authorizeHttp.requestMatchers("static/js/**").permitAll();
                                                         authorizeHttp.anyRequest().authenticated();
@@ -45,8 +45,10 @@ public class SecurityConfig {
                                 .oauth2Login(
                                                 oauth2 -> oauth2
                                                                 .loginPage("/login")
+                                                                .loginProcessingUrl("/login")
                                                                 .defaultSuccessUrl("/chat")
-                                                                .successHandler(oAuth2AuthenticationSuccessHandler))
+                                                                .successHandler(oAuth2AuthenticationSuccessHandler)
+                                                                .permitAll())
                                 .httpBasic(withDefaults())
                                 .build();
         }
@@ -55,5 +57,29 @@ public class SecurityConfig {
         public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
+/* 
+        @Bean
+	public ClientRegistrationRepository clientRegistrationRepository() {
+		return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
+	}
+
+	private ClientRegistration googleClientRegistration() {
+		return ClientRegistration.withRegistrationId("google")
+			.clientId("google-client-id")
+			.clientSecret("google-client-secret")
+			.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+			.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+			.scope("openid", "profile", "email", "address", "phone")
+			.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
+			.tokenUri("https://www.googleapis.com/oauth2/v4/token")
+			.userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+			.userNameAttributeName(IdTokenClaimNames.SUB)
+			.jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+			.clientName("Google")
+			.build();
+	}
+*/
+
 
 }
