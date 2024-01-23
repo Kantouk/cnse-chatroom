@@ -3,6 +3,8 @@ FROM maven:3.8-openjdk-17
 # set the working directory to /app (this will also create the /app directory)
 WORKDIR /app
 
+ENV SPRING_PROFILE_ACTIVE=docker
+
 # copy the pom.xml into /app and the source-code to /app/src
 COPY pom.xml .
 COPY src ./src
