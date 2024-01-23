@@ -1,6 +1,12 @@
-body, html {
-    height: 100%;
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100vh;
+    width: 100vw;
 }
 
 body {
@@ -11,13 +17,14 @@ body {
 
 .container {
     display: flex;
-    min-height: 100vh; /* Mindesthöhe des Viewports */
+    height: 100%;
+    /*min-height: 100vh; /* Mindesthöhe des Viewports */
 }
 
 .sidebar {
     display: flex;
+    width: 20%;
     flex-direction: column; /* Anpassung der Flexbox auf Spalte */
-    width: 250px;
     background-color: #333333; /* Standardmäßig dunkler Hintergrund im Darkmode */
     padding: 20px;
     color: #ffffff;
@@ -63,6 +70,17 @@ body {
 }
 
 
+.user-settings-btn{
+    max-height: 10%; /* Maximale Höhe für den Button auf 80% beschränken */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px; /* Abgerundete Ecken */
+    padding: 10px; /* Padding aussenrum */
+    margin-top: 10px; /* Abstand nach oben */
+    text-align: center; /* Zentrierte Schrift */
+}
+
 .logout-btn {
     background-color: red;
     color: white; /* Damit der Text besser sichtbar ist, weiß setzen */
@@ -80,28 +98,36 @@ body {
 /* Weitere Anpassungen je nach Bedarf... */
 
 .chat-container {
-    flex-grow: 1;
     padding: 20px;
+    width: 80%;
+    min-height: 100%;
+    height: 100%;
+    max-height: 100%;
 }
 
 .chat-header {
     text-align: center;
+    height: 7%;
 }
 
 .chat-messages {
-    height: 80%;
-    overflow-y: scroll;
     border: 1px solid #ccc;
     padding: 10px;
+    height: 80%;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .chat-input {
     margin-top: 20px;
+    margin-bottom: 20px;
+    height: 7%;
     display: flex;
 }
 
 .chat-input input {
     flex-grow: 1;
+    font-size: 20px;
     padding: 10px;
 }
 
@@ -152,4 +178,48 @@ body {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
+}
+
+
+
+
+/* Stil für Chatnachrichten */
+.chat-message {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    word-wrap: break-word;
+}
+
+/* Stil für Nachrichten des aktuellen Benutzers */
+.chat-message.current-user {
+    background-color: #416042; /* Hintergrundfarbe für Nachrichten des aktuellen Benutzers */
+    color: #ffffff; /* Textfarbe für Nachrichten des aktuellen Benutzers */
+    text-align: right; /* Text auf der rechten Seite für Nachrichten des aktuellen Benutzers */
+    border-radius: 10px; /* Runde Ecken für die Nachrichten des aktuellen Benutzers */
+    padding: 8px; /* Innenabstand für die Nachrichten des aktuellen Benutzers */
+    font-size: 20px;
+}
+
+/* Stil für Nachrichten von anderen Benutzern */
+.chat-message:not(.current-user) {
+    background-color: #3b2929; /* Hintergrundfarbe für Nachrichten von anderen Benutzern */
+    color: #ffffff; /* Textfarbe für Nachrichten des anderen Benutzers */
+    text-align: left; /* Text auf der linken Seite für Nachrichten von anderen Benutzern */
+    border-radius: 10px; /* Runde Ecken für die Nachrichten von anderen Benutzern */
+    padding: 8px; /* Innenabstand für die Nachrichten von anderen Benutzern */
+    margin-top: 5px; /* Oberer Außenabstand zwischen den Nachrichten von verschiedenen Benutzern */
+    font-size: 20px;
+}
+
+/* Stil für den Absender in der Nachricht */
+.message-sender {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px; /* Kleiner Schriftgrad für den Absender */
+}
+
+/* Stil für das Datum in der Nachricht */
+.message-date {
+    font-size: 12px; /* Kleiner Schriftgrad für das Datum */
 }

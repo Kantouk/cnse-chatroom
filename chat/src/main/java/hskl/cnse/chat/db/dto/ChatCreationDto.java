@@ -7,9 +7,9 @@ import hskl.cnse.chat.db.model.AuthUser;
 
 
 public class ChatCreationDto {
-    
     private String name;
     private String password;
+    private Long userId;
     private List<AuthUser> participants = new ArrayList<>();
 
     public ChatCreationDto() {
@@ -45,11 +45,17 @@ public class ChatCreationDto {
         this.participants = participants;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "ChatCreationDto [name=" + name + ", password=" + password + ", participants=" + participants.toString() + "]";
     }
-
-    
 
 }

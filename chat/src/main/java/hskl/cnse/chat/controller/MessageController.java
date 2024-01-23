@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hskl.cnse.chat.db.dto.MessageCreationData;
+import hskl.cnse.chat.db.dto.MessageDTO;
 import hskl.cnse.chat.db.model.Message;
 import hskl.cnse.chat.services.MessageService;
-import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/messages")
@@ -25,29 +25,31 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/chat/{chat_id}")
-    public ResponseEntity<List<Message>> getMessagesByChat(@PathVariable Long chat_id) {
-        List<Message> messages = messageService.getMessagesByChatId(chat_id);
-        return ResponseEntity.ok(messages);
+    public ResponseEntity<List<MessageDTO>> getMessagesByChat(@PathVariable @NonNull Long chat_id) {
+        List<MessageDTO> messageDTOs = messageService.getMessagesByChatId(chat_id);
+        return ResponseEntity.ok(messageDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<Message> sendMessage(@RequestBody MessageCreationData messageCreationData, BindingResult result) {
+    public ResponseEntity<MessageDTO> sendMessage(@RequestBody MessageCreationData messageCreationData, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         Message sentMessage = messageService.sendMessage(messageCreationData);
-        return ResponseEntity.ok(sentMessage);
+        MessageDTO rMessageDto = new MessageDTO(sentMessage);
+        return ResponseEntity.ok(rMessageDto);
     }
 
     @PostMapping("/edit/{message_id}")
-    public ResponseEntity<Message> editMessage(@RequestBody MessageCreationData messageCreationData, @PathVariable("message_id") @NonNull Long message_id, BindingResult result) {
+    public ResponseEntity<MessageDTO> editMessage(@RequestBody MessageCreationData messageCreationData, @PathVariable("message_id") @NonNull Long message_id, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         Message editedMessage = messageService.editMessage(messageCreationData, message_id);
-        return ResponseEntity.ok(editedMessage);
+        MessageDTO rMessageDto = new MessageDTO(editedMessage);
+        return ResponseEntity.ok(rMessageDto);
     }
 
     @PostMapping("/delete/{message_id}")
@@ -56,7 +58,6 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-    @Transactional
     @PostMapping("/deleteHistory/{chat_id}")
     public ResponseEntity<Void> deleteChatHistoryForAllUsers(@PathVariable @NonNull Long chat_id) {
         messageService.deleteChatHistoryForAllUsers(chat_id);
@@ -64,9 +65,10 @@ public class MessageController {
     }
 
     @GetMapping("/{messageId}")
-    public ResponseEntity<Message> getMessageById(@PathVariable @NonNull Long messageId) {
+    public ResponseEntity<MessageDTO> getMessageById(@PathVariable @NonNull Long messageId) {
         Message message = messageService.getMessageById(messageId);
-        return ResponseEntity.ok(message);
+        MessageDTO rMessageDto = new MessageDTO(message);
+        return ResponseEntity.ok(rMessageDto);
     }
 
 }

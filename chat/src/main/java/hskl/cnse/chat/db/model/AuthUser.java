@@ -3,7 +3,7 @@ package hskl.cnse.chat.db.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -52,18 +52,22 @@ public class AuthUser {
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
     private List<Role> roles = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages = new ArrayList<>();
     
-    @JsonManagedReference
-    @OneToMany(mappedBy = "participants")
+    @JsonIgnoreProperties("participants")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "users_chats",
+        joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
+        inverseJoinColumns = @JoinColumn(name = "CHAT_ID", referencedColumnName = "ID")
+    )
     private List<Chat> chats = new ArrayList<>();
 
     @Override
     public String toString() {
-        return "AuthUser [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles="
-                + roles.toString() + ", messages=" + messages + ", chats=" + chats + "]";
+        return "AuthUser [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password;
     }
 
     

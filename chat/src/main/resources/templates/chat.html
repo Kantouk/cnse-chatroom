@@ -18,11 +18,11 @@
                 <div class="chatroom-box">Chatraum 2</div>
                 <!-- Weitere Chaträume... -->
 
-                <div class="add-room-btn" onclick="openCreateRoomModal()">+</div>
+                <div class="add-room-btn" onclick="openRoomModal()">+</div>
             </div>
 
             <!-- 3. Benutzericon und Einstellungen -->
-            <div class="user-settings" onclick="openUserSettings()">
+            <div class="user-settings" id="userIcon" onclick="openUserInfoModal()">
                 <img th:src="@{/images/user-286-512.png}" alt="User Icon">
             </div>
 
@@ -30,10 +30,10 @@
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
 
-        <div class="chat-container">
+        <div class="chat-container" style="display: none">
             <div class="chat-header">
                 <!-- Aktuell ausgewählter Chatraum -->
-                <h2>Chatraum 1</h2>
+                <h2 id="chat-header-text">Chatraum 1</h2>
             </div>
             <div class="chat-messages">
                 <!-- Chatnachrichten werden hier angezeigt -->
@@ -47,12 +47,45 @@
     </div>
 
     <!-- Modal für Raum erstellen/beitreten -->
-    <div id="roomModal" class="modal" onclick="closeCreateRoomModal()">
+    <div id="roomModal" class="modal" onclick="closeRoomModal()">
         <div id="modalContent" class="modal-content">
             <button id="createRoomBtn">Einen neuen Raum erstellen</button>
             <button id="joinRoomBtn">Einem Raum beitreten</button>
         </div>
     </div>
+
+    <!-- Ergänztes HTML-Code für das Chatraumerstellungs-Modal -->
+    <div id="createRoomModal" class="modal">
+        <div id="modalContent" class="modal-content">
+            <h2>Chatraum erstellen</h2>
+            <input type="text" id="chatNameInput" placeholder="Chatname">
+            <input type="password" id="passwordInput" placeholder="Passwort (optional)">
+            <button id="createChatBtn" onclick="addChat()">Chat erstellen</button>
+        </div>
+    </div>
+
+    <!-- Ergänztes HTML-Code für das Chatbeitritts-Modal -->
+    <div id="joinRoomModal" class="modal">
+        <div id="modalContent" class="modal-content">
+            <h2>Raum beitreten</h2>
+            <input type="text" id="chatIdInput" placeholder="Chat-ID">
+            <input type="password" id="chatIdPassword" placeholder="Chat-Passwort">
+            <button id="joinChatBtn" onclick="joinChat()">Beitreten</button>
+        </div>
+    </div>
+
+    <!-- Ergänztes HTML-Code für das Benutzerinfo-Modal -->
+    <div id="userInfoModal" class="modal">
+        <div id="modalContent" class="modal-content">
+            <h2>Benutzerinformationen</h2>
+            <p><strong>Vorname:</strong> <span id="firstNameSpan"></span></p>
+            <p><strong>Nachname:</strong> <span id="lastNameSpan"></span></p>
+            <p><strong>Emailadresse:</strong> <span id="emailSpan"></span></p>
+            <button onclick="closeUserInfoModal()">Schließen</button>
+        </div>
+    </div>
+
+
 
     <!-- Skript mit der ausgelagerten logout()-Funktion -->
     <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
