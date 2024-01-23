@@ -5,6 +5,8 @@ function logout() {
     // Extrahiere den Ursprung (Origin) der aktuellen Anwendung
     const currentOrigin = window.location.origin;
 
+    stopMessageChecking();
+
     // Baue den vollständigen Pfad zur Logout-Route
     const logoutPath = '/logout';
 
@@ -373,6 +375,7 @@ async function createChatFunction(chatName, password) {
         userRoomsContainer.innerHTML = '';
 
         var chatName = document.getElementById('chat-header-text');
+        const chatContainer = document.querySelector('.chat-container');
 
         // Durchlaufe die Chaträume und füge sie dem Container hinzu
         userChats.forEach(chat => {
@@ -388,6 +391,10 @@ async function createChatFunction(chatName, password) {
                 chatName.textContent = chat.name + " Chat-Id: " + chat.id + " Wird fürs Beitreten verwendet";
                 sessionStorage.removeItem('selectedChatId');
                 sessionStorage.setItem('selectedChatId', chat.id);
+                console.log("Chat selected");
+                stopMessageChecking();
+                chatContainer.style.display="block";
+                startMessageChecking(chat.id);
                 loadAndShowMessages(chat.id);
             });
 
@@ -519,4 +526,54 @@ async function createChatFunction(chatName, password) {
 
         // Scrolle zum unteren Ende des Chatfensters, um die neuesten Nachrichten anzuzeigen
         chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    }
+
+//######################################################### Messages-Abfragen ###########################################################
+
+    // Interval-ID, um das Interval später stoppen zu können
+    let messageCheckInterval;
+
+    // Starte das Überprüfungsintervall, wenn ein Chatraum ausgewählt wurde
+    function startMessageChecking(chatId) {
+        console.log("intervall starten");
+        // Überprüfe alle 5 Sekunden auf neue Nachrichten
+        messageCheckInterval = setInterval(() => {
+            checkForNewMessages(chatId);
+        }, 5000); // 5000 Millisekunden = 5 Sekunden
+    }
+
+    // Stoppe das Überprüfungsintervall
+    function stopMessageChecking() {
+        clearInterval(messageCheckInterval);
+    }
+
+    // Funktion zum Überprüfen neuer Nachrichten und Laden/Anzeigen
+    async function checkForNewMessages(chatId) {
+        try {
+            // Hier implementierst du die Logik zum Überprüfen neuer Nachrichten
+            // Du könntest beispielsweise eine Funktion aufrufen, die vom Server prüft, ob neue Nachrichten vorhanden sind.
+
+            // Beispiel: Prüfe auf neue Nachrichten
+            const hasNewMessages = await checkForNewMessagesFromServer(chatId);
+
+            console.log("Checked for new Messages mit chat id: "+ chatId+ " Neue Nachrichten vorhanden? "+hasNewMessages);
+
+            // Wenn neue Nachrichten vorhanden sind, lade und zeige sie an
+            if (hasNewMessages) {
+                await loadAndShowMessages(chatId);
+            }
+        } catch (error) {
+            console.error('Fehler beim Überprüfen neuer Nachrichten:', error);
+            // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+        }
+    }
+
+    // Funktion, die vom Server aufgerufen wird, um auf neue Nachrichten zu überprüfen
+    async function checkForNewMessagesFromServer(chatId) {
+        // Hier implementierst du die Logik, um vom Server zu überprüfen, ob neue Nachrichten vorhanden sind.
+        // Diese Funktion könnte beispielsweise eine Anfrage an den Server senden.
+
+        // Rückgabe kann ein Boolean-Wert sein, der angibt, ob neue Nachrichten vorhanden sind.
+        // Beispiel:
+        return true; // In diesem Beispiel wird immer true zurückgegeben. Du musst dies entsprechend deiner Server-Logik anpassen.
     }
