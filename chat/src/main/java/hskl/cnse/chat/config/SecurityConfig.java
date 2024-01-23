@@ -27,18 +27,18 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(
                                                 authorizeHttp -> {
                                                         authorizeHttp.requestMatchers("/","/favicon.svg","/error","/register","/login","static/css/**","static/js/**").permitAll();
-                                                        authorizeHttp.requestMatchers("/chat").hasAnyAuthority("ADMIN","OIDC_USER","USER");
+                                                        authorizeHttp.requestMatchers("/chat").hasAnyAuthority("ROLE_ADMIN","OIDC_USER","USER");
                                                         authorizeHttp.anyRequest().authenticated();
                                                 })
                                 .formLogin(
                                                 form -> form
-                                                                .loginPage("/")
-                                                                .loginProcessingUrl("/")
+                                                                .loginPage("/login")
+                                                                .loginProcessingUrl("/login")
                                                                 .defaultSuccessUrl("/chat")
                                                                 .permitAll())
                                 .oauth2Login(
                                                 oauth2 -> oauth2
-                                                                .loginPage("/")
+                                                                .loginPage("/login")
                                                                 .defaultSuccessUrl("/chat"))
                                 .httpBasic(withDefaults())
                                 .build();
