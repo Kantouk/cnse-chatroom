@@ -113,13 +113,25 @@
 			<version>2.16.0</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>spring-cloud-gcp-starter-sql-mysql</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>cloud</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.google.cloud</groupId>
+					<artifactId>spring-cloud-gcp-starter-sql-mysql</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
