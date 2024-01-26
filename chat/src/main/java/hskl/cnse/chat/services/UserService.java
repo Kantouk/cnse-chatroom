@@ -60,7 +60,7 @@ public class UserService {
 
     private UserRegistrationDto convertEntityToDto(AuthUser user) {
         UserRegistrationDto userDto = new UserRegistrationDto();
-        String[] name = user.getName().split(" ");
+        String[] name = user.getName().split(" ");  
         userDto.setFirstName(name[0]);
         userDto.setLastName(name[1]);
         userDto.setEmail(user.getEmail());

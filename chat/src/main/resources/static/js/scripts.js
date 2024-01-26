@@ -212,7 +212,7 @@ async function createChatFunction(chatName, password) {
         );
 
         // Aktion bei Drücken der Enter-Taste im Texteingabefeld
-        document.querySelector('.text-input').addEventListener('keypress', function (e) {
+        document.querySelector('.chat-input input').addEventListener('keypress', function (e) { 
             // Überprüfen, ob die gedrückte Taste die Enter-Taste ist
             if (e.key === 'Enter') {
                 sendMessage();
@@ -308,7 +308,7 @@ async function createChatFunction(chatName, password) {
         userInfoModal.style.display = 'flex';
         console.log("User-Settings");
         // Hier kannst du die Benutzerinformationen laden und in das Modal einfügen
-        // loadUserInfo();
+        loadUserInfo();
     }
 
     function closeUserInfoModal() {
@@ -337,7 +337,7 @@ async function createChatFunction(chatName, password) {
         // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
 
         // Beispiel:
-        const response = await fetch('/user-info', {
+        const response = await fetch('/user/email', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -508,7 +508,7 @@ async function createChatFunction(chatName, password) {
     }
 
     // Funktion zum Anzeigen von Nachrichten im Chatfenster
-    function showMessages(messages) {
+    async function showMessages(messages) {
         const chatMessagesContainer = document.querySelector('.chat-messages');
 
         // Leere den Inhalt des Chatfensters

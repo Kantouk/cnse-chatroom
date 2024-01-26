@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.Authentication;
+
+import hskl.cnse.chat.db.dto.UserDTO;
 import hskl.cnse.chat.db.dto.UserRegistrationDto;
 import hskl.cnse.chat.db.model.AuthUser;
 import hskl.cnse.chat.services.*;
 
 import java.util.List;
-
 
 @Controller
 public class UserController {
@@ -36,16 +37,15 @@ public class UserController {
     // handler method to handle user registration form submit request
     @PostMapping("/register")
     public String registration(@Valid @ModelAttribute("user") UserRegistrationDto userDto,
-                               BindingResult result,
-                               Model model) {
+            BindingResult result,
+            Model model) {
         AuthUser existingUser = userService.findUserByEmail(userDto.getEmail());
 
-        if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) { 
+        if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
             result.rejectValue("email", "Email already exists",
                     "There is already an account registered with the same email");
         }
 
-        
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             System.out.println("#################################################################################");
@@ -55,7 +55,6 @@ public class UserController {
             userService.saveUser(userDto);
             AuthUser savedUser = userService.findUserByEmail(userDto.getEmail());
 
-            
             System.out.println("#################################################################################");
             System.out.println("Roles for user " + savedUser.getEmail() + ": " + savedUser.getRoles());
             System.out.println("#################################################################################");
@@ -90,9 +89,34 @@ public class UserController {
             System.out.println(username + id);
 
             return ResponseEntity.ok(id);
-    } else {
-        return ResponseEntity.status(0).build();
+        } else {
+            return ResponseEntity.status(0).build();
+        }
     }
+
+    @GetMapping("/user/email")
+    public ResponseEntity<UserDTO> getUserByEmail() {
+        // Zugriff auf die Authentication-Instanz
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Überprüfe, ob der Benutzer authentifiziert ist
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Hier kannst du auf verschiedene Informationen zugreifen, z.B.:
+            String username = authentication.getName();
+
+            AuthUser authUser = userService.findUserByEmail(username);
+            String[] name = authUser.getName().split(" ");
+            
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFirstName(name[0]);
+            userDTO.setLastName(name[1]);
+            userDTO.setEmail(authUser.getEmail());
+            userDTO.setId(authUser.getId());  
+
+            return ResponseEntity.ok(userDTO);
+        } else {
+            return ResponseEntity.status(0).build();
+        }
     }
 
     @GetMapping("/user/name")
@@ -105,9 +129,9 @@ public class UserController {
             // Hier kannst du auf verschiedene Informationen zugreifen, z.B.:
             String username = authentication.getName();
             return ResponseEntity.ok(username);
-    } else {
-        return ResponseEntity.status(0).build();
+        } else {
+            return ResponseEntity.status(0).build();
+        }
     }
-    }
-    
+
 }
