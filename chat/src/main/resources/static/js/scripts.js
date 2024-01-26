@@ -7,6 +7,8 @@ function logout() {
 
     stopMessageChecking();
 
+    sessionStorage.removeItem('user_id');
+
     // Baue den vollständigen Pfad zur Logout-Route
     const logoutPath = '/logout';
 
@@ -207,34 +209,47 @@ async function createChatFunction(chatName, password) {
 
         // Aktion bei Klick auf "Senden" Button
         document.querySelector('.send-btn').addEventListener('click', function () {
-            // Hole den Text aus dem Eingabefeld
-            getCurrentUserId();
-            
-            // getCurrentUsername();
+            sendMessage();
+            }
+        );
 
-            var messageText = document.querySelector('.chat-input input').value;
-
-            // Überprüfe, ob die Nachricht nicht leer ist
-            if (messageText.trim() !== '') {
-                // Erstelle das Datenobjekt für die Nachricht
-                var messageData = {
-                    content: messageText,
-                    chat_id: sessionStorage.getItem('selectedChatId'),
-                    user_id: sessionStorage.getItem('user_id'),
-                    // Weitere notwendige Daten, abhängig von deiner Anforderung
-                };
-
-                console.log(sessionStorage.getItem('user_id'));
-
-                // Sende die Nachricht an den MessageController
-                sendMessageToController(messageData);
-
-                // Leere das Eingabefeld
-                document.querySelector('.chat-input input').value = '';
+        // Aktion bei Drücken der Enter-Taste im Texteingabefeld
+        document.querySelector('.chat-input input').addEventListener('keypress', function (e) { 
+            // Überprüfen, ob die gedrückte Taste die Enter-Taste ist
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
     })
 
+    function sendMessage(){
+        // Hole den Text aus dem Eingabefeld
+        getCurrentUserId();
+            
+        // getCurrentUsername();
+
+        var messageText = document.querySelector('.chat-input input').value;
+
+        // Überprüfe, ob die Nachricht nicht leer ist
+         if (messageText.trim() !== '') {
+        // Erstelle das Datenobjekt für die Nachricht
+            var messageData = {
+            content: messageText,
+            chat_id: sessionStorage.getItem('selectedChatId'),
+            user_id: sessionStorage.getItem('user_id'),
+            // Weitere notwendige Daten, abhängig von deiner Anforderung
+        };
+
+        console.log(sessionStorage.getItem('user_id'));
+
+        // Sende die Nachricht an den MessageController
+        sendMessageToController(messageData);
+
+        // Leere das Eingabefeld
+        document.querySelector('.chat-input input').value = '';
+}
+
+    }
 
     // Funktion zum Senden der Nachricht an den MessageController
     function sendMessageToController(messageData) {
@@ -295,7 +310,7 @@ async function createChatFunction(chatName, password) {
         userInfoModal.style.display = 'flex';
         console.log("User-Settings");
         // Hier kannst du die Benutzerinformationen laden und in das Modal einfügen
-        // loadUserInfo();
+        loadUserInfo();
     }
 
     function closeUserInfoModal() {
@@ -324,7 +339,7 @@ async function createChatFunction(chatName, password) {
         // Du kannst eine Fetch-Anfrage an den Server senden oder die benötigten Daten verarbeiten
 
         // Beispiel:
-        const response = await fetch('/user-info', {
+        const response = await fetch('/user/email', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -388,7 +403,7 @@ async function createChatFunction(chatName, password) {
             chatRoomElement.addEventListener('click', function () {
                 // Hier kannst du weitere Aktionen für den Klick auf den Chatraum durchführen
                 // Zum Beispiel den ausgewählten Chatraum setzen und die Nachrichten laden
-                chatName.textContent = chat.name + " Chat-Id: " + chat.id + " Wird fürs Beitreten verwendet";
+                chatName.textContent = chat.name + "            Chat-Id: " + chat.id + "     (Wird fürs Beitreten verwendet)";
                 sessionStorage.removeItem('selectedChatId');
                 sessionStorage.setItem('selectedChatId', chat.id);
                 console.log("Chat selected");
@@ -495,7 +510,7 @@ async function createChatFunction(chatName, password) {
     }
 
     // Funktion zum Anzeigen von Nachrichten im Chatfenster
-    function showMessages(messages) {
+    async function showMessages(messages) {
         const chatMessagesContainer = document.querySelector('.chat-messages');
 
         // Leere den Inhalt des Chatfensters

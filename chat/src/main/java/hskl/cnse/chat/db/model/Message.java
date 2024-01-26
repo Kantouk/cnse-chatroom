@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -60,7 +59,7 @@ public class Message {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(String content) { 
         this.content = content;
     }
 
