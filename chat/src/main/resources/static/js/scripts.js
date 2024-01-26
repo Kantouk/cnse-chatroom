@@ -7,6 +7,8 @@ function logout() {
 
     stopMessageChecking();
 
+    sessionStorage.removeItem('user_id');
+
     // Baue den vollständigen Pfad zur Logout-Route
     const logoutPath = '/logout';
 
@@ -401,7 +403,7 @@ async function createChatFunction(chatName, password) {
             chatRoomElement.addEventListener('click', function () {
                 // Hier kannst du weitere Aktionen für den Klick auf den Chatraum durchführen
                 // Zum Beispiel den ausgewählten Chatraum setzen und die Nachrichten laden
-                chatName.textContent = chat.name + " Chat-Id: " + chat.id + " Wird fürs Beitreten verwendet";
+                chatName.textContent = chat.name + "            Chat-Id: " + chat.id + "     (Wird fürs Beitreten verwendet)";
                 sessionStorage.removeItem('selectedChatId');
                 sessionStorage.setItem('selectedChatId', chat.id);
                 console.log("Chat selected");
