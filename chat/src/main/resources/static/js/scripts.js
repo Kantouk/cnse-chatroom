@@ -207,34 +207,47 @@ async function createChatFunction(chatName, password) {
 
         // Aktion bei Klick auf "Senden" Button
         document.querySelector('.send-btn').addEventListener('click', function () {
-            // Hole den Text aus dem Eingabefeld
-            getCurrentUserId();
-            
-            // getCurrentUsername();
+            sendMessage();
+            }
+        );
 
-            var messageText = document.querySelector('.chat-input input').value;
-
-            // Überprüfe, ob die Nachricht nicht leer ist
-            if (messageText.trim() !== '') {
-                // Erstelle das Datenobjekt für die Nachricht
-                var messageData = {
-                    content: messageText,
-                    chat_id: sessionStorage.getItem('selectedChatId'),
-                    user_id: sessionStorage.getItem('user_id'),
-                    // Weitere notwendige Daten, abhängig von deiner Anforderung
-                };
-
-                console.log(sessionStorage.getItem('user_id'));
-
-                // Sende die Nachricht an den MessageController
-                sendMessageToController(messageData);
-
-                // Leere das Eingabefeld
-                document.querySelector('.chat-input input').value = '';
+        // Aktion bei Drücken der Enter-Taste im Texteingabefeld
+        document.querySelector('.text-input').addEventListener('keypress', function (e) {
+            // Überprüfen, ob die gedrückte Taste die Enter-Taste ist
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
     })
 
+    function sendMessage(){
+        // Hole den Text aus dem Eingabefeld
+        getCurrentUserId();
+            
+        // getCurrentUsername();
+
+        var messageText = document.querySelector('.chat-input input').value;
+
+        // Überprüfe, ob die Nachricht nicht leer ist
+         if (messageText.trim() !== '') {
+        // Erstelle das Datenobjekt für die Nachricht
+            var messageData = {
+            content: messageText,
+            chat_id: sessionStorage.getItem('selectedChatId'),
+            user_id: sessionStorage.getItem('user_id'),
+            // Weitere notwendige Daten, abhängig von deiner Anforderung
+        };
+
+        console.log(sessionStorage.getItem('user_id'));
+
+        // Sende die Nachricht an den MessageController
+        sendMessageToController(messageData);
+
+        // Leere das Eingabefeld
+        document.querySelector('.chat-input input').value = '';
+}
+
+    }
 
     // Funktion zum Senden der Nachricht an den MessageController
     function sendMessageToController(messageData) {
