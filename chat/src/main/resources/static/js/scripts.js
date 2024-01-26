@@ -7,7 +7,7 @@ function logout() {
 
     stopMessageChecking();
 
-    sessionStorage.removeItem('user_id');
+    sessionStorage.clear();
 
     // Baue den vollständigen Pfad zur Logout-Route
     const logoutPath = '/logout';
