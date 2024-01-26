@@ -2,7 +2,7 @@ name: Build and Deploy to Cloud Run
 
 on:
   push:
-    branches: [ "main", "gh-actions" ] 
+    branches: [ "main", "config-rework" ] 
   workflow_dispatch:  
 
 env:
