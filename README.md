@@ -1,6 +1,6 @@
 # Chad-Room
 
-Willkommen bei Chad-Room, einer innovativen Chatanwendung für den Webbrowser, entwickelt als Projektabgabe für die Vorlesung "Cloud Native Software Engineering" an der Hochschule Kaiserslautern. Diese Vorlesung wurde von Gastdozenten des Unternehmens Novatec Consulting GmbH gehalten. Das Hauptziel des Projekts war es, eine 12-Faktor-konforme, cloud-native Anwendung zu erstellen, die effizient auf einer Cloud-Plattform betrieben werden kann. Chad-Room kann auf Google Cloud Run gehostet oder lokal auf Ihrem Rechner ausgeführt werden, wobei Google Cloud SQL oder eine lokale MySQL-Datenbank in einem Docker-Container zum Einsatz kommt, ergänzt durch einen Adminer-Container als Benutzeroberfläche für die lokale Datenbank.
+Willkommen bei Chad-Room, einer Chatanwendung für den Webbrowser, entwickelt als Projektabgabe für die Vorlesung "Cloud Native Software Engineering" an der Hochschule Kaiserslautern. Diese Vorlesung wurde von Gastdozenten des Unternehmens Novatec Consulting GmbH gehalten. Das Hauptziel des Projekts war es, eine 12-Faktor-konforme, cloud-native Anwendung zu erstellen, die effizient auf einer Cloud-Plattform betrieben werden kann. Chad-Room kann auf Google Cloud Run gehostet oder lokal auf Ihrem Rechner ausgeführt werden, wobei Google Cloud SQL oder eine lokale MySQL-Datenbank in einem Docker-Container zum Einsatz kommt, ergänzt durch einen Adminer-Container als Benutzeroberfläche für die lokale Datenbank.
 
 ## Installation
 
