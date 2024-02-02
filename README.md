@@ -10,6 +10,7 @@ Willkommen bei Chad-Room, einer innovativen Chatanwendung für den Webbrowser, e
 2. **Konfigurieren Sie Google Cloud SQL**: Richten Sie eine Cloud SQL-Instanz für die Datenbank ein.
 3. **Umgebungsvariabeln in der Cloud-Umgebung setzen**: Setzen Sie Umgebungsvariabeln wie Datenbank-Uri, Spring Profile und weitere aus der application.properties und application-cloud.properties in dem Container Ihrer Cloud Run Instanz.
 4. **POM-Profil in der Dockerfile setzen**: Entfernen Sie das '#' vor dem, für Cloud markierte, Befehl in dem Dockerfile der Anwendung.
+5. **Github Workflows anpassen**: Passen Sie die Github Workflows an Ihre Umgebung an.
    
    ![Screenshot des Dockerfiles](images/Dockerfile.png) 
 
