@@ -11,7 +11,7 @@ Willkommen bei Chad-Room, einer innovativen Chatanwendung für den Webbrowser, e
 3. **Umgebungsvariabeln in der Cloud-Umgebung setzen**: Setzen Sie Umgebungsvariabeln wie Datenbank-Uri, Spring Profile und weitere aus der application.properties und application-cloud.properties in dem Container Ihrer Cloud Run Instanz.
 4. **POM-Profil in der Dockerfile setzen**: Entfernen Sie das '#' vor dem, für Cloud markierte, Befehl in dem Dockerfile der Anwendung.
    
-   ![Screenshot des Dockerfiles](images/dockerfile.png) 
+   ![Screenshot des Dockerfiles](images/Dockerfile.png) 
 
 ### Lokales Setup
 
