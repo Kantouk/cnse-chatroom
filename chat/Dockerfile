@@ -9,8 +9,11 @@ ENV SPRING_PROFILE_ACTIVE=cloud
 COPY pom.xml .
 COPY src ./src
 
-# build the application with maven
+# build the application with default/local pom profile
+#RUN mvn clean install -DskipTests 
+# build the application with cloud pom profile
 RUN mvn clean -Pcloud install -DskipTests 
+
 
 # expose the standard spring port
 EXPOSE 8081
